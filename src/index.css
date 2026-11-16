@@ -516,7 +516,7 @@ ul, ol {
   z-index: 5;
   pointer-events: none;
   opacity: 0;
-  animation: rise 1.2s var(--ease) 0.2s forwards;
+  animation: fade-in 1.2s var(--ease) 0.2s forwards;
   filter: drop-shadow(0 20px 30px rgba(0,0,0,0.12));
 }
 
@@ -524,14 +524,12 @@ ul, ol {
   width: 100%;
 }
 
-@keyframes rise {
+@keyframes fade-in {
   0% {
     opacity: 0;
-    transform: translateY(60px) scale(0.96);
   }
   100% {
     opacity: 1;
-    transform: none;
   }
 }
 

@@ -11,11 +11,6 @@ const GALLERY = [
     src: '/assets/desktop-buddy-wink.jpg',
     label: 'Wink O_<',
     alt: 'Desktop Buddy winking face'
-  },
-  {
-    src: '/assets/desktop-buddy-expressions.jpg',
-    label: '4 Expressions',
-    alt: 'Desktop Buddy 4 pixel facial expressions collage'
   }
 ];
 
