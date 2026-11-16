@@ -19,7 +19,7 @@ export default function ShopProducts() {
       title: 'Desktop Buddy / Expressive Edition.',
       price: 750,
       originalPrice: 999,
-      image: '/assets/desktop-buddy-expressions.jpg',
+      image: '/assets/desktop-buddy-main.jpg',
       altImage: '/assets/desktop-buddy-wink.jpg',
       type: 'Desktop Pet · 4 Animated Moods'
     }
