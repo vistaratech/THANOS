@@ -1,24 +1,33 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 export default function Statement() {
-  const [scrollY, setScrollY] = useState(0);
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const dropRef = useRef(null);
 
   useEffect(() => {
-    const onScroll = () => {
-      setScrollY(window.scrollY);
+    const updateScrollProgress = () => {
+      const dropTop = dropRef.current.getBoundingClientRect().top + window.scrollY;
+      const progress = window.scrollY + window.innerHeight - dropTop;
+      setScrollProgress(Math.min(600, Math.max(0, progress)));
     };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+
+    updateScrollProgress();
+    window.addEventListener('scroll', updateScrollProgress, { passive: true });
+    window.addEventListener('resize', updateScrollProgress);
+    return () => {
+      window.removeEventListener('scroll', updateScrollProgress);
+      window.removeEventListener('resize', updateScrollProgress);
+    };
   }, []);
 
   return (
     <div className="shopify-section section-statement">
       <div className="stack">
-        <section className="drop" data-theme="red">
+        <section ref={dropRef} className="drop" data-theme="red">
           <div
             className="render render--drop"
             style={{
-              transform: `translate(0, ${scrollY * -0.08}px) rotate(${16 + scrollY * 0.005}deg)`
+              transform: `translate(0, ${scrollProgress * -0.08}px) rotate(${16 + scrollProgress * 0.005}deg)`
             }}
           >
             <img

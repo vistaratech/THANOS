@@ -601,9 +601,9 @@ ul, ol {
 }
 
 .render--b {
-  left: 36%;
-  bottom: -16%;
-  width: min(25vw, 340px);
+  left: 39%;
+  bottom: 12%;
+  width: min(22vw, 300px);
   z-index: 3;
 }
 
@@ -1797,11 +1797,12 @@ ul, ol {
     width: 36%;
   }
   .drop {
-    aspect-ratio: 2.2 / 1;
+    aspect-ratio: 1.25 / 1;
   }
   .render--drop {
-    left: -22%;
-    width: 120%;
+    left: 17.5%;
+    top: 8%;
+    width: 65%;
   }
   .plug {
     min-height: 96vw;
