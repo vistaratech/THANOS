@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="100%" height="100%">
+  <defs>
+    <!-- Shadow filter for 3D depth -->
+    <filter id="keycap-drop-shadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="28" stdDeviation="24" flood-color="#000000" flood-opacity="0.22" />
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#000000" flood-opacity="0.14" />
+    </filter>
+
+    <!-- Bevel inner gradient for the keycap face -->
+    <linearGradient id="inner-face-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="85%" stop-color="#FBF2DE" />
+      <stop offset="100%" stop-color="#EFE2C5" />
+    </linearGradient>
+
+    <!-- Bevel shadow around inner face -->
+    <linearGradient id="inner-bevel-shadow" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#000000" stop-opacity="0.08" />
+      <stop offset="100%" stop-color="#000000" stop-opacity="0" />
+    </linearGradient>
+  </defs>
+
+  <g filter="url(#keycap-drop-shadow)">
+    <!-- Base Keycap Rounded Body (Thick border outline) -->
+    <rect x="70" y="70" width="660" height="660" rx="190" fill="#141414" stroke="#141414" stroke-width="12" />
+
+    <!-- Color Segments on Outer Rim -->
+    <!-- Red Top Rim -->
+    <path d="M 70 260 C 70 155 155 70 260 70 L 540 70 C 645 70 730 155 730 260 L 670 280 C 660 200 600 140 520 130 L 280 130 C 200 140 140 200 130 280 Z" fill="#ED4027" />
+    
+    <!-- Amber / Yellow Right Rim -->
+    <path d="M 730 260 C 730 370 730 430 730 540 C 730 645 645 730 540 730 L 520 670 C 600 660 660 600 670 520 L 670 280 L 730 260 Z" fill="#FEB31D" />
+
+    <!-- Blue Bottom Rim -->
+    <path d="M 540 730 C 430 730 370 730 260 730 C 155 730 70 645 70 540 L 130 520 C 140 600 200 660 280 670 L 520 670 Z" fill="#154586" />
+
+    <!-- Orange / Coral Left Rim -->
+    <path d="M 70 540 L 70 260 L 130 280 L 130 520 Z" fill="#FF6B35" />
+
+    <!-- Inner Keycap Dish / Face (Cream White) -->
+    <rect x="125" y="125" width="550" height="550" rx="145" fill="url(#inner-face-grad)" stroke="#141414" stroke-width="26" />
+
+    <!-- Inner Keycap Subtle Top Highlight -->
+    <path d="M 170 240 C 170 180 200 155 260 150 L 540 150 C 600 155 630 180 630 240" fill="none" stroke="#FFFFFF" stroke-width="12" stroke-linecap="round" opacity="0.6" />
+
+    <!-- Chunky 8-Bit Pixel Letter "b" -->
+    <!--
+      Pixel grid for lowercase 'b' (5 columns x 6 rows, block size ~64px):
+      Ascender (left stem): x=250..330, y=210..590 (height 380px)
+      Top of bowl: x=330..530, y=370..450
+      Right of bowl: x=450..530, y=370..590
+      Bottom of bowl: x=330..530, y=510..590
+      Hollow counter: x=330..450, y=450..510
+    -->
+    <g fill="#141414">
+      <!-- Left Full Height Stem (Ascender) -->
+      <rect x="250" y="210" width="80" height="380" rx="6" />
+
+      <!-- Top horizontal bar of the bowl -->
+      <rect x="330" y="370" width="200" height="80" rx="6" />
+
+      <!-- Right vertical bar of the bowl -->
+      <rect x="450" y="370" width="80" height="220" rx="6" />
+
+      <!-- Bottom horizontal bar of the bowl -->
+      <rect x="330" y="510" width="200" height="80" rx="6" />
+
+      <!-- Subtle Pixel bevel highlight for that tactile feel -->
+      <rect x="254" y="214" width="72" height="14" fill="#333333" rx="2" />
+      <rect x="334" y="374" width="192" height="14" fill="#333333" rx="2" />
+    </g>
+
+    <!-- Keycap corner accents / screws / tactile texture -->
+    <circle cx="215" cy="615" r="7" fill="#141414" opacity="0.25" />
+    <circle cx="585" cy="615" r="7" fill="#141414" opacity="0.25" />
+  </g>
+</svg>

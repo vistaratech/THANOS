@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="100%" height="100%">
+  <defs>
+    <!-- Shadow filter for 3D depth -->
+    <filter id="keycap-drop-shadow-red" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="28" stdDeviation="24" flood-color="#000000" flood-opacity="0.3" />
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#000000" flood-opacity="0.18" />
+    </filter>
+
+    <linearGradient id="red-face-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FF573D" />
+      <stop offset="85%" stop-color="#ED4027" />
+      <stop offset="100%" stop-color="#C9321C" />
+    </linearGradient>
+
+    <linearGradient id="dish-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="90%" stop-color="#FDF1D6" />
+      <stop offset="100%" stop-color="#F2DEC0" />
+    </linearGradient>
+  </defs>
+
+  <g filter="url(#keycap-drop-shadow-red)">
+    <!-- Base Keycap Rounded Body in Red -->
+    <rect x="70" y="70" width="660" height="660" rx="190" fill="url(#red-face-grad)" stroke="#141414" stroke-width="26" />
+
+    <!-- Inner Keycap Dish / Face -->
+    <rect x="135" y="135" width="530" height="530" rx="140" fill="url(#dish-grad)" stroke="#141414" stroke-width="24" />
+
+    <!-- Chunky 8-Bit Pixel Letter "b" in Red / Black -->
+    <g fill="#141414">
+      <!-- Left Full Height Stem (Ascender) -->
+      <rect x="250" y="210" width="80" height="380" rx="6" />
+
+      <!-- Top horizontal bar of the bowl -->
+      <rect x="330" y="370" width="200" height="80" rx="6" />
+
+      <!-- Right vertical bar of the bowl -->
+      <rect x="450" y="370" width="80" height="220" rx="6" />
+
+      <!-- Bottom horizontal bar of the bowl -->
+      <rect x="330" y="510" width="200" height="80" rx="6" />
+    </g>
+
+    <!-- Keycap corner accents -->
+    <circle cx="215" cy="615" r="7" fill="#141414" opacity="0.2" />
+    <circle cx="585" cy="615" r="7" fill="#141414" opacity="0.2" />
+  </g>
+</svg>
