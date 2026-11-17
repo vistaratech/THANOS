@@ -60,7 +60,8 @@ export default function Hero() {
                 openColorModal(defaultProduct);
               }}
             >
-              <b>New</b> Meet Desktop Buddy, your tactile desktop pet &rarr;
+              <b>New</b>
+              <span>Meet Desktop Buddy, your tactile desktop pet &rarr;</span>
             </a>
 
             <p className="hero__sub">

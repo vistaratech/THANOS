@@ -1784,17 +1784,31 @@ ul, ol {
     bottom: 5%;
     max-width: none;
   }
+  .hero__new {
+    align-items: flex-start;
+    max-width: 100%;
+    padding: 8px 12px 8px 8px;
+    border-radius: 18px;
+    line-height: 1.35;
+  }
+  .hero__new b {
+    flex: none;
+    margin-top: 1px;
+  }
+  .hero__new span {
+    min-width: 0;
+  }
   .render--a {
     left: -10%;
-    top: 68vw;
-    width: 58%;
+    top: 66vw;
+    width: 46%;
   }
   .render--b {
     left: auto;
-    right: -4%;
-    top: 84vw;
+    right: 0;
+    top: 78vw;
     bottom: auto;
-    width: 36%;
+    width: 30%;
   }
   .drop {
     aspect-ratio: 1.25 / 1;
@@ -1810,7 +1824,7 @@ ul, ol {
   }
   .plug__text {
     font-size: 23vw;
-    margin-top: 70vw;
+    margin-top: 16vw;
   }
   .keyboard {
     --k: 7.9vw;
