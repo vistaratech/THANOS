@@ -571,28 +571,6 @@ ul, ol {
   gap: 12px;
 }
 
-.hero__new {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 18px;
-  padding: 6px 12px 6px 6px;
-  border-radius: 99px;
-  background: var(--ink);
-  color: var(--ivory);
-  font-size: 13px;
-  font-weight: 500;
-}
-
-.hero__new b {
-  padding: 3px 9px;
-  border-radius: 99px;
-  background: var(--red);
-  font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: 0.05em;
-}
-
 .render--a {
   left: -2%;
   top: -10%;
@@ -1783,20 +1761,6 @@ ul, ol {
     right: 16px;
     bottom: 5%;
     max-width: none;
-  }
-  .hero__new {
-    align-items: flex-start;
-    max-width: 100%;
-    padding: 8px 12px 8px 8px;
-    border-radius: 18px;
-    line-height: 1.35;
-  }
-  .hero__new b {
-    flex: none;
-    margin-top: 1px;
-  }
-  .hero__new span {
-    min-width: 0;
   }
   .render--a {
     left: -10%;

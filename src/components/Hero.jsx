@@ -52,18 +52,6 @@ export default function Hero() {
 
           {/* Buy Callout */}
           <div className="hero__buy">
-            <a
-              className="hero__new"
-              href="#spotlight"
-              onClick={(e) => {
-                e.preventDefault();
-                openColorModal(defaultProduct);
-              }}
-            >
-              <b>New</b>
-              <span>Meet Desktop Buddy, your tactile desktop pet &rarr;</span>
-            </a>
-
             <p className="hero__sub">
               Desktop Buddy makes everyday devices fun to use, and makes sure you stand out in public.
             </p>
