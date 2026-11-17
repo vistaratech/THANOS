@@ -16,6 +16,7 @@ import CartDrawer from './components/CartDrawer';
 import StickyCta from './components/StickyCta';
 import ColorModal from './components/ColorModal';
 import PolicyPage from './components/PolicyPage';
+import AdminPage from './components/AdminPage';
 
 function MainContent() {
   const { toastMessage, toastVisible, currentPath, navigate } = useCart();
@@ -58,6 +59,10 @@ function MainContent() {
     themeSections.forEach((sec) => observer.observe(sec));
     return () => observer.disconnect();
   }, [currentPath]);
+
+  if (cleanPath === '/admin') {
+    return <AdminPage />;
+  }
 
   // If on a standalone policy page route, render the standalone PolicyPage
   if (policyKey) {

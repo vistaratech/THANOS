@@ -94,7 +94,7 @@ const POLICIES_DATA = {
   },
   privacy: {
     id: 'privacy',
-    badge: 'Zero Spam · 100% Secure',
+    badge: 'Order Support · Data Privacy',
     title: 'Privacy Policy',
     intro: 'Your trust is our top priority. We only collect the bare minimum details required to deliver your Desktop Buddy.',
     sections: [
@@ -103,14 +103,16 @@ const POLICIES_DATA = {
         content: [
           'Customer Name: To address your parcel correctly.',
           'WhatsApp / Mobile Number: To send your order confirmation and dispatch tracking link.',
-          'Delivery Address & Pincode: Strictly for shipping your package via our courier partners.'
+          'Delivery Address & Pincode: Strictly for shipping your package via our courier partners.',
+          'Order items and customer notes: Stored in our Neon Postgres database so authorized staff can manage and fulfill the order.'
         ]
       },
       {
         heading: 'How We Protect Your Data',
         content: [
           'We NEVER sell, trade, or share your contact details with telemarketers, third-party advertisers, or spam networks.',
-          'Your information is solely shared with the courier delivery partner responsible for delivering your package.',
+          'Your information is shared with the courier delivery partner responsible for delivery and with Neon Postgres to store and manage checkout requests.',
+          'Checkout details are accessed by authorized administrators through the protected order dashboard. WhatsApp receives the order message only when you choose to send it.',
           'We do not send promotional spam. You will only receive messages concerning your order status.'
         ]
       },

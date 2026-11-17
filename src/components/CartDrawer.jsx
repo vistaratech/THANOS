@@ -19,6 +19,8 @@ export default function CartDrawer() {
 
   const [inputCode, setInputCode] = useState('');
   const [step, setStep] = useState('cart'); // 'cart' | 'shipping' | 'success'
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -45,13 +47,21 @@ export default function CartDrawer() {
   const handleFormChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    setSubmitError('');
   };
 
-  const handlePlaceWhatsAppOrder = (e) => {
+  const handlePlaceWhatsAppOrder = async (e) => {
     e.preventDefault();
 
-    if (!formData.name.trim() || !formData.phone.trim() || !formData.address.trim() || !formData.pincode.trim()) {
-      alert('Please fill in your name, phone number, address, and pincode.');
+    if (isSubmitting) return;
+    if (
+      !formData.name.trim() ||
+      !formData.phone.trim() ||
+      !formData.address.trim() ||
+      !formData.city.trim() ||
+      !formData.pincode.trim()
+    ) {
+      setSubmitError('Please fill in your name, phone number, address, city, and pincode.');
       return;
     }
 
@@ -86,17 +96,50 @@ Hi team! I would like to order this. Please contact me with confirmation and del
     const encodedMessage = encodeURIComponent(message);
     const whatsappUrl = `https://wa.me/918883388365?text=${encodedMessage}`;
 
-    setLastOrderDetails({
-      customer: formData.name,
-      total: finalTotal,
-      whatsappUrl
-    });
+    const whatsappWindow = window.open('', '_blank');
+    if (whatsappWindow) whatsappWindow.opener = null;
+    setIsSubmitting(true);
+    setSubmitError('');
 
-    // Open WhatsApp in new tab/app
-    window.open(whatsappUrl, '_blank');
+    try {
+      const response = await fetch('/api/orders', {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          customer: formData,
+          items: cart.map(({ id, variant, quantity }) => ({ id, variant, quantity })),
+          promoCode
+        })
+      });
 
-    setStep('success');
-    clearCart();
+      let payload;
+      try {
+        payload = await response.json();
+      } catch {
+        throw new Error('The order service returned an invalid response. Your cart is unchanged.');
+      }
+      if (!response.ok) {
+        throw new Error(payload.error || 'The order could not be saved. Your cart is unchanged.');
+      }
+
+      if (whatsappWindow && !whatsappWindow.closed) {
+        whatsappWindow.location.href = whatsappUrl;
+      }
+      setLastOrderDetails({
+        customer: formData.name,
+        total: finalTotal,
+        orderId: payload.orderId,
+        whatsappUrl
+      });
+      setStep('success');
+      clearCart();
+    } catch (error) {
+      if (whatsappWindow && !whatsappWindow.closed) whatsappWindow.close();
+      setSubmitError(error.message || 'The order could not be saved. Your cart is unchanged.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleDrawerClose = () => {
@@ -252,12 +295,14 @@ Hi team! I would like to order this. Please contact me with confirmation and del
           {/* STEP 2: SHIPPING & WHATSAPP CHECKOUT FORM */}
           {step === 'shipping' && (
             <form id="whatsapp-order-form" onSubmit={handlePlaceWhatsAppOrder} className="checkout-form">
+              {submitError && <p className="checkout-error" role="alert">{submitError}</p>}
               <div className="checkout-intro">
                 <span className="wa-pill">
                   <span className="wa-dot"></span> WhatsApp Direct Order
                 </span>
                 <p>
-                  Fill in your delivery address below. Your order request will be sent to our team via WhatsApp. <b>Our team will contact you directly to confirm your order and delivery details!</b>
+                  Fill in your delivery address below. Your order request will be saved for fulfillment before WhatsApp opens. <b>Our team will contact you directly to confirm your order and delivery details!</b>{' '}
+                  <a href="/privacy">Privacy Policy</a>
                 </p>
               </div>
 
@@ -355,7 +400,7 @@ Hi team! I would like to order this. Please contact me with confirmation and del
               <div style={{ fontSize: '54px', marginBottom: '12px' }}>🎉</div>
               <h3 style={{ fontSize: '26px', marginBottom: '8px' }}>Request Sent via WhatsApp!</h3>
               <p style={{ color: 'var(--soft)', fontSize: '15px', lineHeight: 1.5, marginBottom: '24px' }}>
-                Thank you, <b>{lastOrderDetails?.customer}</b>! Your order request was sent to <b>+91 88833 88365</b>. Our team will contact you on WhatsApp to confirm your order details and delivery!
+                Thank you, <b>{lastOrderDetails?.customer}</b>! Order request <b>#{lastOrderDetails?.orderId?.slice(0, 8).toUpperCase()}</b> was saved. Use the button below to open WhatsApp and send it to <b>+91 88833 88365</b>; our team will contact you to confirm.
               </p>
 
               {lastOrderDetails?.whatsappUrl && (
@@ -425,7 +470,7 @@ Hi team! I would like to order this. Please contact me with confirmation and del
               <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" style={{ marginRight: '8px' }}>
                 <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2zM12.05 20.21c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31c-.82-1.31-1.26-2.83-1.26-4.4 0-4.54 3.7-8.24 8.24-8.24 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.83c.01 4.54-3.68 8.25-8.22 8.25zm4.52-6.17c-.25-.12-1.47-.72-1.7-.81-.23-.08-.39-.12-.56.12-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.14.17-.25.25-.41.08-.17.04-.31-.02-.43s-.56-1.34-.76-1.84c-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.86.84-.86 2.05s.88 2.38 1 2.54c.12.17 1.73 2.64 4.2 3.7.59.25 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.15-1.18-.06-.11-.22-.17-.47-.29z"/>
               </svg>
-              Send Request on WhatsApp · {formatPrice(finalTotal)}
+              {isSubmitting ? 'Saving order…' : `Send Request on WhatsApp · ${formatPrice(finalTotal)}`}
             </button>
             <p className="cart__assure" style={{ textAlign: 'center', fontSize: '12px' }}>
               Our Erode team will reach out on WhatsApp (+91 88833 88365) to confirm & dispatch

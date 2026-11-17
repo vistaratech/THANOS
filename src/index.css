@@ -1857,6 +1857,17 @@ ul, ol {
   padding: 4px 0 16px;
 }
 
+.checkout-error {
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px solid rgba(180, 39, 24, 0.3);
+  border-radius: 10px;
+  background: #fff0ed;
+  color: #982818;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
 .checkout-intro {
   background: rgba(37, 211, 102, 0.08);
   border: 1px solid rgba(37, 211, 102, 0.25);

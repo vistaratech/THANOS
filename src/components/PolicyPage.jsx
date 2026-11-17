@@ -116,7 +116,8 @@ const POLICIES = {
         content: [
           'Customer Name: Used to address and label your parcel correctly.',
           'WhatsApp / Mobile Number: Used solely to send order verification, dispatch tracking links, and delivery coordination.',
-          'Delivery Address & Pincode: Shared with our courier partners (Blue Dart, Delhivery, DTDC, India Post) to physically transport your package to your doorstep.'
+          'Delivery Address & Pincode: Shared with our courier partners (Blue Dart, Delhivery, DTDC, India Post) to physically transport your package to your doorstep.',
+          'Order items and customer notes: Stored with the order request in Neon Postgres, our database service provider, so authorized staff can manage and fulfill it.'
         ]
       },
       {
@@ -125,6 +126,7 @@ const POLICIES = {
           'To process and fulfill your pre-order requests.',
           'To communicate real-time delivery status updates via WhatsApp.',
           'To handle return, exchange, or customer support queries.',
+          'Order details are stored in our Neon database for order administration and are not used for advertising.',
           'We DO NOT sell, rent, lease, or monetize your contact details with external third-party marketing companies, advertisers, or call centers.'
         ]
       },
@@ -132,6 +134,7 @@ const POLICIES = {
         title: 'Data Security & Storage',
         content: [
           'All communication conducted through our official WhatsApp (+91 88833 88365) is protected by WhatsApp end-to-end encryption.',
+          'Checkout details are stored in Neon Postgres and can be accessed by authorized administrators through the protected order dashboard. WhatsApp receives the order message only when you choose to send it.',
           'We do not store credit card or debit card numbers on our servers.'
         ]
       },
