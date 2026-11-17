@@ -101,7 +101,7 @@ export default function InteractiveKeyboard() {
 
   const defaultProduct = {
     id: 'desktop-buddy-main',
-    title: 'Desktop Buddy / pre-order.',
+    title: 'YUYK / pre-order.',
     price: 750,
     originalPrice: 999,
     image: '/assets/desktop-buddy-main.jpg',
@@ -153,7 +153,7 @@ export default function InteractiveKeyboard() {
             className="btn btn--lg btn--light"
             onClick={() => openColorModal(defaultProduct)}
           >
-            Shop Desktop Buddy
+            Shop YUYK
           </button>
 
           {unlocked && (

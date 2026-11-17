@@ -11,7 +11,7 @@ export default function Footer() {
         <div className="footer__marquee" aria-hidden="true">
           <div className="footer__track">
             <span className="statement" style={{ fontSize: '6vw', letterSpacing: '-0.02em' }}>
-              DESKTOP BUDDY
+              YUYK
             </span>
             <img src="/assets/mascot-1.svg?v=2" alt="" className="footer__guy" width="120" height="107" loading="lazy" />
             <span className="statement" style={{ fontSize: '6vw', letterSpacing: '-0.02em', color: 'var(--red)' }}>
@@ -19,7 +19,7 @@ export default function Footer() {
             </span>
             <img src="/assets/mascot-3.svg?v=2" alt="" className="footer__guy" width="120" height="107" loading="lazy" />
             <span className="statement" style={{ fontSize: '6vw', letterSpacing: '-0.02em' }}>
-              DESKTOP BUDDY
+              YUYK
             </span>
             <img src="/assets/mascot-1.svg?v=2" alt="" className="footer__guy" width="120" height="107" loading="lazy" />
             <span className="statement" style={{ fontSize: '6vw', letterSpacing: '-0.02em', color: 'var(--blue)' }}>
@@ -32,14 +32,14 @@ export default function Footer() {
         {/* Footer Navigation Grid */}
         <div className="footer__grid">
           <div>
-            <p>Desktop Buddy gives your everyday tech some personality. Designed with love in Tamil Nadu.</p>
+            <p>YUYK gives your everyday tech some personality. Designed with love in Tamil Nadu.</p>
           </div>
 
           <div>
             <h3>Shop</h3>
             <ul>
               <li><a href="/#shop">Shop all</a></li>
-              <li><a href="/#spotlight">Desktop Buddy</a></li>
+              <li><a href="/#spotlight">YUYK</a></li>
               <li><a href="/#merch">Merch</a></li>
               <li><a href="/#about">About</a></li>
             </ul>
@@ -136,7 +136,7 @@ export default function Footer() {
 
         {/* Legal Bar */}
         <div className="footer__legal">
-          <span>&copy; 2026 Desktop Buddy</span>
+          <span>&copy; 2026 YUYK</span>
           <span>Give your tech some personality</span>
           <span className="footer__cur">
             Prices in{' '}

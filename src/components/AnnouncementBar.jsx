@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 const MESSAGES = [
   'Free delivery on orders over ₹1,000',
   'Cash on delivery available across India',
-  'Desktop Buddy is here · Handcrafted in Vijayamangalam, Erode',
+  'YUYK is here · Handcrafted in Vijayamangalam, Erode',
   'Easy 7-day hassle-free returns'
 ];
 

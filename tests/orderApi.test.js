@@ -30,7 +30,7 @@ test('order totals and product details are derived from the server catalogue', (
   assert.equal(order.subtotal, 1500);
   assert.equal(order.deliveryFee, 0);
   assert.equal(order.total, 1500);
-  assert.equal(order.items[0].title, 'Desktop Buddy / pre-order.');
+  assert.equal(order.items[0].title, 'YUYK / pre-order.');
   assert.equal(order.items[0].unitPrice, 750);
 });
 

@@ -1,7 +1,7 @@
-# THANOS - Desktop Buddy ⚡️
+# YUYK ⚡️
 > *Tech with personality.*
 
-An interactive React e-commerce web application for Desktop Buddy — the expressive desktop companion robot.
+An interactive React e-commerce web application for YUYK — the expressive desktop companion robot.
 
 Powered by Exceptionz × Vistara Tech.
 

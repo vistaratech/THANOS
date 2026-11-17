@@ -284,9 +284,9 @@ export default function AdminPage() {
     <main className="admin-page">
       <div className="admin-shell">
         <header className="admin-topbar">
-          <a className="admin-brand" href="/" aria-label="Desktop Buddy home">
+          <a className="admin-brand" href="/" aria-label="YUYK home">
             <img src="/assets/buddy-logo.svg" alt="" />
-            <span>Desktop Buddy <small>Order Admin</small></span>
+            <span>YUYK <small>Order Admin</small></span>
           </a>
           {authenticated && (
             <div className="admin-topbar__actions">

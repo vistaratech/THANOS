@@ -15,7 +15,7 @@ export default function Hero() {
 
   const defaultProduct = {
     id: 'desktop-buddy-main',
-    title: 'Desktop Buddy / pre-order.',
+    title: 'YUYK / pre-order.',
     price: 750,
     originalPrice: 999,
     image: '/assets/desktop-buddy-main.jpg',
@@ -26,7 +26,7 @@ export default function Hero() {
     <div className="shopify-section section-hero">
       <div className="stack">
         <section className="hero" data-theme="ivory">
-          {/* Floating 3D Keycap with 'D' for Desktop Buddy */}
+          {/* Floating 3D keycap */}
           <div
             className="render render--a"
             style={{
@@ -37,7 +37,7 @@ export default function Hero() {
               src="/assets/keycap-d-colored-render.webp?v=4"
               width="1600"
               height="1600"
-              alt="Desktop Buddy 'D' Keycap"
+              alt="YUYK keycap"
               fetchpriority="high"
             />
           </div>
@@ -53,7 +53,7 @@ export default function Hero() {
           {/* Buy Callout */}
           <div className="hero__buy">
             <p className="hero__sub">
-              Desktop Buddy makes everyday devices fun to use, and makes sure you stand out in public.
+              YUYK makes everyday devices fun to use, and makes sure you stand out in public.
             </p>
 
             <div className="hero__ctas">
@@ -61,7 +61,7 @@ export default function Hero() {
                 className="btn btn--lg"
                 onClick={() => openColorModal(defaultProduct)}
               >
-                Shop Desktop Buddy
+                Shop YUYK
               </button>
               <a className="btn btn--lg btn--ghost" href="#shop">
                 Shop all
@@ -80,7 +80,7 @@ export default function Hero() {
               src="/assets/keycap-filled-render.webp"
               width="1600"
               height="1600"
-              alt="Desktop Buddy Mechanical Key"
+              alt="YUYK mechanical key"
             />
           </div>
         </section>

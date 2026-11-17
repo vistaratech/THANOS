@@ -34,7 +34,7 @@ export default function Statement() {
               src="/assets/keycap-d-filled-render.webp?v=4"
               width="1600"
               height="1600"
-              alt="Desktop Buddy Red 'D' Keycap"
+              alt="Red mechanical keycap"
               loading="lazy"
             />
           </div>

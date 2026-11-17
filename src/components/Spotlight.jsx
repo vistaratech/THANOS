@@ -5,12 +5,12 @@ const GALLERY = [
   {
     src: '/assets/desktop-buddy-main.jpg',
     label: 'Happy ^_^',
-    alt: 'Desktop Buddy orange cube robot smiling face on desk'
+    alt: 'YUYK orange cube robot smiling face on desk'
   },
   {
     src: '/assets/desktop-buddy-wink.jpg',
     label: 'Wink O_<',
-    alt: 'Desktop Buddy winking face'
+    alt: 'YUYK winking face'
   }
 ];
 
@@ -20,7 +20,7 @@ export default function Spotlight() {
 
   const product = {
     id: 'desktop-buddy-main',
-    title: 'Desktop Buddy / pre-order.',
+    title: 'YUYK / pre-order.',
     price: 750,
     originalPrice: 999,
     image: GALLERY[activeImageIndex].src,
@@ -81,7 +81,7 @@ export default function Spotlight() {
             <span className="dot"></span>Just launched · Made in Erode
           </p>
           <h2 className="statement spot__name">
-            Desktop Buddy / pre-order.
+            YUYK / pre-order.
           </h2>
           <p className="spot__tagline">
             The expressive desktop pet that gives your workspace some personality. Features multiple animated pixel faces, chunky tactile feel, and mood expressions.

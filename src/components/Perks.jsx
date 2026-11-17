@@ -6,7 +6,7 @@ export default function Perks() {
 
   return (
     <div className="shopify-section section-perks">
-      <section className="perks" aria-label="Why shop with Desktop Buddy">
+      <section className="perks" aria-label="Why shop with YUYK">
         <ul>
           <li style={{ cursor: 'pointer' }} onClick={() => openPolicy('shipping')} title="View Delivery Policy">
             <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">

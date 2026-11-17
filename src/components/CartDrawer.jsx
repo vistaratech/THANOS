@@ -75,7 +75,7 @@ export default function CartDrawer() {
 
     // Construct structured WhatsApp message
     const message =
-`👋 *NEW ORDER REQUEST - DESKTOP BUDDY* 🚀
+`👋 *NEW ORDER REQUEST - YUYK* 🚀
 ━━━━━━━━━━━━━━━━━━━━
 👤 *Customer:* ${formData.name.trim()}
 📞 *Phone:* ${formData.phone.trim()}
@@ -227,7 +227,7 @@ Hi team! I would like to order this. Please contact me with confirmation and del
                 <div className="cart__empty">
                   <p>Your cart is empty.</p>
                   <button className="btn" onClick={closeCart}>
-                    Shop Desktop Buddy
+                    Shop YUYK
                   </button>
                 </div>
               ) : (

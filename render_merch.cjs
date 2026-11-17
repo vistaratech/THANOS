@@ -1,11 +1,10 @@
 const sharp = require('sharp');
-const fs = require('fs');
 
 async function renderAllMerch() {
-  console.log('Rendering new Desktop Buddy merchandise images...');
+  console.log('Rendering new YUYK merchandise images...');
 
   // ==========================================
-  // 1. TEE BACK (DESKTOP BUDDY collegiate embroidery)
+  // 1. TEE BACK (YUYK collegiate embroidery)
   // ==========================================
   const { data: backData, info: backInfo } = await sharp('assets/merch-tee-back.webp')
     .raw()
@@ -40,7 +39,7 @@ async function renderAllMerch() {
     .png()
     .toBuffer();
 
-  // Bold varsity embroidery: DESKTOP BUDDY with heavy stitches and drop shadow
+  // Bold varsity embroidery with heavy stitches and drop shadow
   const backOverlay = Buffer.from(`
     <svg width="${bw}" height="${bh}" viewBox="0 0 ${bw} ${bh}" xmlns="http://www.w3.org/2000/svg">
       <defs>
@@ -54,14 +53,10 @@ async function renderAllMerch() {
         </linearGradient>
       </defs>
 
-      <!-- Main DESKTOP BUDDY bold text group -->
       <g filter="url(#tee-shadow)" text-anchor="middle" font-family="'Archivo Black', 'Arial Black', Impact, sans-serif" font-weight="900">
         <!-- White embroidered outer stitch / border for contrast -->
-        <text x="448" y="885" font-size="82" letter-spacing="8" fill="none" stroke="#ECEBE8" stroke-width="10" stroke-linejoin="round">DESKTOP</text>
-        <text x="448" y="885" font-size="82" letter-spacing="8" fill="url(#thread-grad)">DESKTOP</text>
-
-        <text x="448" y="995" font-size="94" letter-spacing="12" fill="none" stroke="#ECEBE8" stroke-width="10" stroke-linejoin="round">BUDDY</text>
-        <text x="448" y="995" font-size="94" letter-spacing="12" fill="url(#thread-grad)">BUDDY</text>
+        <text x="448" y="955" font-size="150" letter-spacing="12" fill="none" stroke="#ECEBE8" stroke-width="10" stroke-linejoin="round">YUYK</text>
+        <text x="448" y="955" font-size="150" letter-spacing="12" fill="url(#thread-grad)">YUYK</text>
       </g>
     </svg>
   `);
@@ -74,7 +69,7 @@ async function renderAllMerch() {
   console.log('Created public/assets/merch-tee-back.webp');
 
   // ==========================================
-  // 2. CAP (DESKTOP BUDDY 3D puff white embroidery)
+  // 2. CAP (YUYK 3D puff white embroidery)
   // ==========================================
   const { data: capData, info: capInfo } = await sharp('assets/merch-cap.webp')
     .raw()
@@ -124,11 +119,8 @@ async function renderAllMerch() {
       <!-- 3D Puff Embroidery on Cap Crown -->
       <g filter="url(#cap-shadow)" text-anchor="middle" font-family="'Archivo Black', 'Arial Black', Impact, sans-serif" font-weight="900" transform="rotate(-1, 480, 360)">
         <!-- Underlying puff stitch border -->
-        <text x="480" y="345" font-size="52" letter-spacing="4" fill="none" stroke="#A4A8B6" stroke-width="6" stroke-linejoin="round">DESKTOP</text>
-        <text x="480" y="345" font-size="52" letter-spacing="4" fill="url(#silver-thread)">DESKTOP</text>
-
-        <text x="480" y="405" font-size="58" letter-spacing="6" fill="none" stroke="#A4A8B6" stroke-width="6" stroke-linejoin="round">BUDDY</text>
-        <text x="480" y="405" font-size="58" letter-spacing="6" fill="url(#silver-thread)">BUDDY</text>
+        <text x="480" y="385" font-size="68" letter-spacing="8" fill="none" stroke="#A4A8B6" stroke-width="6" stroke-linejoin="round">YUYK</text>
+        <text x="480" y="385" font-size="68" letter-spacing="8" fill="url(#silver-thread)">YUYK</text>
       </g>
     </svg>
   `);
@@ -141,7 +133,7 @@ async function renderAllMerch() {
   console.log('Created public/assets/merch-cap.webp');
 
   // ==========================================
-  // 3. TEE FRONT (Cute Orange Desktop Buddy Robot Chest Patch)
+  // 3. TEE FRONT (Cute Orange YUYK Robot Chest Patch)
   // ==========================================
   const { data: frontData, info: frontInfo } = await sharp('assets/merch-tee-front.webp')
     .raw()
@@ -175,7 +167,7 @@ async function renderAllMerch() {
     .png()
     .toBuffer();
 
-  // Streetwear embroidered patch of Desktop Buddy Orange Cube Robot
+  // Streetwear embroidered patch of the YUYK orange cube robot
   const patchOverlay = Buffer.from(`
     <svg width="${fw}" height="${fh}" viewBox="0 0 ${fw} ${fh}" xmlns="http://www.w3.org/2000/svg">
       <defs>
@@ -196,7 +188,7 @@ async function renderAllMerch() {
         <!-- Dark inner stitch frame -->
         <rect x="8" y="8" width="138" height="158" rx="22" fill="#141414" />
 
-        <!-- Desktop Buddy Orange Cube Body -->
+        <!-- Orange cube body -->
         <rect x="18" y="18" width="118" height="118" rx="20" fill="url(#cube-body)" stroke="#CC4E00" stroke-width="2.5" />
         <path d="M 22 36 L 40 22 L 116 22 L 132 36 Z" fill="#FFA54A" opacity="0.6" />
 
@@ -222,15 +214,7 @@ async function renderAllMerch() {
 
   console.log('Created public/assets/merch-tee-front.webp');
 
-  // Copy to assets/ and dist/assets/
-  fs.copyFileSync('public/assets/merch-tee-back.webp', 'assets/merch-tee-back.webp');
-  fs.copyFileSync('public/assets/merch-tee-back.webp', 'dist/assets/merch-tee-back.webp');
-  fs.copyFileSync('public/assets/merch-cap.webp', 'assets/merch-cap.webp');
-  fs.copyFileSync('public/assets/merch-cap.webp', 'dist/assets/merch-cap.webp');
-  fs.copyFileSync('public/assets/merch-tee-front.webp', 'assets/merch-tee-front.webp');
-  fs.copyFileSync('public/assets/merch-tee-front.webp', 'dist/assets/merch-tee-front.webp');
-
-  console.log('Successfully synced all merch assets to assets/ and dist/assets/!');
+  console.log('Successfully rendered all YUYK merchandise assets.');
 }
 
 renderAllMerch().catch(console.error);

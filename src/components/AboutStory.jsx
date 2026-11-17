@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 const PARAGRAPHS = [
   'Most tech is designed to disappear. Ours is designed to be noticed: chunky enough to hold, press and click, colourful because colour is a feature, and a little bit weird, because the best objects have a personality.',
   'We make devices that make you stand out in public. Put one on your desk and watch people ask about it.',
-  'Desktop Buddy is the first. More are on the way.'
+  'YUYK is the first. More are on the way.'
 ];
 
 export default function AboutStory() {
@@ -39,7 +39,7 @@ export default function AboutStory() {
   return (
     <div id="about" className="shopify-section section-story">
       <section ref={containerRef} className="info" data-theme="ivory">
-        <p className="info__lead">Desktop Buddy makes typical devices fun to use.</p>
+        <p className="info__lead">YUYK makes typical devices fun to use.</p>
 
         {PARAGRAPHS.map((paragraph, pIdx) => {
           const words = paragraph.split(/\s+/);

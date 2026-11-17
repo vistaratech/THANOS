@@ -2,22 +2,22 @@ import React from 'react';
 
 const MERCH_ITEMS = [
   {
-    title: 'Desktop Buddy Mascot Tee',
+    title: 'YUYK Mascot Tee',
     type: 'Merch',
     image: '/assets/merch-tee-front.webp?v=2',
-    alt: 'White tee with embroidered Desktop Buddy robot on the chest'
+    alt: 'White tee with an embroidered robot mascot on the chest'
   },
   {
-    title: 'Desktop Buddy Cap',
+    title: 'YUYK Cap',
     type: 'Merch',
     image: '/assets/merch-cap.webp?v=2',
-    alt: 'Desktop Buddy 3D embroidered cap in cosmonaut blue'
+    alt: 'YUYK 3D embroidered cap in cosmonaut blue'
   },
   {
-    title: 'Desktop Buddy Statement Tee',
+    title: 'YUYK Statement Tee',
     type: 'Merch',
     image: '/assets/merch-tee-back.webp?v=2',
-    alt: 'White tee with massive DESKTOP BUDDY collegiate embroidery across the back'
+    alt: 'White tee with YUYK collegiate embroidery across the back'
   }
 ];
 

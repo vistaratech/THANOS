@@ -16,7 +16,7 @@ export default function Header() {
 
   const defaultProduct = {
     id: 'desktop-buddy-main',
-    title: 'Desktop Buddy / pre-order.',
+    title: 'YUYK / pre-order.',
     price: 750,
     originalPrice: 999,
     image: '/assets/desktop-buddy-main.jpg',
@@ -29,7 +29,7 @@ export default function Header() {
         <div className="header__inner">
           <nav className="header__nav" aria-label="Main">
             <a href="#shop">Shop all</a>
-            <a href="#spotlight">Desktop Buddy</a>
+            <a href="#spotlight">YUYK</a>
             <a href="#merch">Merch</a>
             <a href="#about">About</a>
           </nav>
@@ -49,8 +49,8 @@ export default function Header() {
             </svg>
           </button>
 
-          <a className="header__logo" href="/" aria-label="Desktop Buddy home">
-            <span>Desktop Buddy</span>
+          <a className="header__logo" href="/" aria-label="YUYK home">
+            <span>YUYK</span>
             <span className="logo-dot"></span>
           </a>
 
@@ -96,7 +96,7 @@ export default function Header() {
         {isMenuOpen && (
           <nav className="menu" aria-label="Mobile">
             <a href="#shop" onClick={() => setIsMenuOpen(false)}>Shop all</a>
-            <a href="#spotlight" onClick={() => setIsMenuOpen(false)}>Desktop Buddy</a>
+            <a href="#spotlight" onClick={() => setIsMenuOpen(false)}>YUYK</a>
             <a href="#merch" onClick={() => setIsMenuOpen(false)}>Merch</a>
             <a href="#about" onClick={() => setIsMenuOpen(false)}>About</a>
           </nav>

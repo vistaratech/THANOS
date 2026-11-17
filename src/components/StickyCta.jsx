@@ -21,7 +21,7 @@ export default function StickyCta() {
 
   const defaultProduct = {
     id: 'desktop-buddy-main',
-    title: 'Desktop Buddy / pre-order.',
+    title: 'YUYK / pre-order.',
     price: 750,
     originalPrice: 999,
     image: '/assets/desktop-buddy-main.jpg',
@@ -34,13 +34,13 @@ export default function StickyCta() {
     <div className={`sticky-cta ${isVisible ? 'is-on' : ''}`}>
       <img
         src="/assets/desktop-buddy-main.jpg"
-        alt="Desktop Buddy"
+        alt="YUYK"
         width="44"
         height="44"
         className="sticky-cta__img"
       />
       <div className="sticky-cta__text">
-        <b>Desktop Buddy / pre-order.</b>
+        <b>YUYK / pre-order.</b>
         <span>{formatPrice(750)}</span>
       </div>
       <button

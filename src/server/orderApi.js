@@ -18,12 +18,12 @@ export const ORDER_STATUSES = [
 
 const PRODUCTS = {
   'desktop-buddy-main': {
-    title: 'Desktop Buddy / pre-order.',
+    title: 'YUYK / pre-order.',
     type: 'Tactile Desktop Pet',
     price: 750
   },
   'desktop-buddy-expressions': {
-    title: 'Desktop Buddy / Expressive Edition.',
+    title: 'YUYK / Expressive Edition.',
     type: 'Desktop Pet · 4 Animated Moods',
     price: 750
   }

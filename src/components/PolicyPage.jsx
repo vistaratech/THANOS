@@ -9,12 +9,12 @@ const POLICIES = {
     title: 'Delivery & Shipping Policy',
     badge: 'Pan-India Delivery',
     lastUpdated: 'November 2026',
-    description: 'Everything you need to know about how your Desktop Buddy is packaged, dispatched, and delivered from our studio in Vijayamangalam, Erode.',
+    description: 'Everything you need to know about how your YUYK is packaged, dispatched, and delivered from our studio in Vijayamangalam, Erode.',
     sections: [
       {
         title: 'Dispatch Location & Crafting Time',
         content: [
-          'Every Desktop Buddy is assembled, inspected, and tactile-tested by hand at our workshop in Vijayamangalam, Perundurai, Erode, Tamil Nadu 638056.',
+          'Every YUYK is assembled, inspected, and tactile-tested by hand at our workshop in Vijayamangalam, Perundurai, Erode, Tamil Nadu 638056.',
           'Orders are packed and dispatched within 24 to 48 hours of order confirmation.'
         ]
       },
@@ -49,7 +49,7 @@ const POLICIES = {
     title: '7-Day Return & Exchange Policy',
     badge: '100% Risk-Free Guarantee',
     lastUpdated: 'November 2026',
-    description: 'We take great pride in our tactile craftsmanship. If you are not completely satisfied with your Desktop Buddy, our 7-day hassle-free policy has you covered.',
+    description: 'We take great pride in our tactile craftsmanship. If you are not completely satisfied with your YUYK, our 7-day hassle-free policy has you covered.',
     sections: [
       {
         title: '7-Day Return Window',
@@ -91,7 +91,7 @@ const POLICIES = {
       {
         title: 'Refund Timelines for Returned Products',
         content: [
-          'Once your returned Desktop Buddy arrives back at our hub in Vijayamangalam, Erode and is verified, your refund is approved within 24 hours.',
+          'Once your returned YUYK arrives back at our hub in Vijayamangalam, Erode and is verified, your refund is approved within 24 hours.',
           'For WhatsApp & COD Orders: Refunds are sent instantly to your preferred UPI ID (Google Pay, PhonePe, Paytm) or bank account.',
           'For Pre-paid Orders: The amount is credited back to your original source account within 3 to 5 business days.'
         ]
@@ -109,7 +109,7 @@ const POLICIES = {
     title: 'Privacy Policy',
     badge: 'Your Privacy Matters',
     lastUpdated: 'November 2026',
-    description: 'This Privacy Policy describes how Desktop Buddy collects, uses, and protects your information when you visit our store or order our products.',
+    description: 'This Privacy Policy describes how YUYK collects, uses, and protects your information when you visit our store or order our products.',
     sections: [
       {
         title: 'Information We Collect',
@@ -151,13 +151,13 @@ const POLICIES = {
     title: 'Terms & Conditions',
     badge: 'Official Terms of Service',
     lastUpdated: 'November 2026',
-    description: 'These terms and conditions govern your use of the Desktop Buddy website and the purchase of our tactile products.',
+    description: 'These terms and conditions govern your use of the YUYK website and the purchase of our tactile products.',
     sections: [
       {
         title: 'About the Business',
         content: [
-          'Desktop Buddy is an independent tactile desk companion creator based in Vijayamangalam, Perundurai, Erode, Tamil Nadu 638056, India.',
-          'Desktop Buddy products are mechanical desk pets and fidget accessories designed for desk and workspace use.'
+          'YUYK is an independent tactile desk companion creator based in Vijayamangalam, Perundurai, Erode, Tamil Nadu 638056, India.',
+          'YUYK products are mechanical desk pets and fidget accessories designed for desk and workspace use.'
         ]
       },
       {
@@ -171,13 +171,13 @@ const POLICIES = {
         title: 'Order Confirmation & Fulfillment',
         content: [
           'Order requests sent through our site via WhatsApp are verified by our customer team before dispatch.',
-          'Desktop Buddy reserves the right to decline or reschedule orders in pincodes categorized as unserviceable by our courier network, with full notice to the customer.'
+          'YUYK reserves the right to decline or reschedule orders in pincodes categorized as unserviceable by our courier network, with full notice to the customer.'
         ]
       },
       {
         title: 'Governing Jurisdiction',
         content: [
-          'Any dispute or legal claim arising from or related to orders placed with Desktop Buddy shall be subject to the exclusive jurisdiction of the competent courts in Erode, Tamil Nadu, India.'
+          'Any dispute or legal claim arising from or related to orders placed with YUYK shall be subject to the exclusive jurisdiction of the competent courts in Erode, Tamil Nadu, India.'
         ]
       }
     ]
@@ -198,7 +198,7 @@ export default function PolicyPage({ policyKey = 'privacy', onNavigate }) {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    document.title = `${policy.title} — Desktop Buddy`;
+    document.title = `${policy.title} — YUYK`;
   }, [policyKey, policy.title]);
 
   const handleLinkClick = (e, path) => {
@@ -223,7 +223,7 @@ export default function PolicyPage({ policyKey = 'privacy', onNavigate }) {
             onClick={(e) => handleLinkClick(e, '/')}
             className="policy-page-nav__logo"
           >
-            <b>DESKTOPBUDDY</b>
+            <b>YUYK</b>
             <span className="dot"></span>
           </a>
 
@@ -318,7 +318,7 @@ export default function PolicyPage({ policyKey = 'privacy', onNavigate }) {
           </div>
           <div>
             <a
-              href="https://wa.me/918883388365?text=Hi%20Desktop%20Buddy%20team!%20I%20have%20a%20question%20regarding%20the%20store%20policies."
+              href="https://wa.me/918883388365?text=Hi%20YUYK%20team!%20I%20have%20a%20question%20regarding%20the%20store%20policies."
               target="_blank"
               rel="noreferrer"
               className="btn btn--lg wa-btn"

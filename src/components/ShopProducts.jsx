@@ -7,7 +7,7 @@ export default function ShopProducts() {
   const products = [
     {
       id: 'desktop-buddy-main',
-      title: 'Desktop Buddy / pre-order.',
+      title: 'YUYK / pre-order.',
       price: 750,
       originalPrice: 999,
       image: '/assets/desktop-buddy-main.jpg',
@@ -16,7 +16,7 @@ export default function ShopProducts() {
     },
     {
       id: 'desktop-buddy-expressions',
-      title: 'Desktop Buddy / Expressive Edition.',
+      title: 'YUYK / Expressive Edition.',
       price: 750,
       originalPrice: 999,
       image: '/assets/desktop-buddy-main.jpg',
@@ -27,10 +27,10 @@ export default function ShopProducts() {
 
   return (
     <div id="shop" className="shopify-section section-products">
-      <section className="section" data-theme="ivory" aria-label="Shop Desktop Buddy">
+      <section className="section" data-theme="ivory" aria-label="Shop YUYK">
         <header className="section__head">
           <div>
-            <h2 className="statement section__title">Shop Desktop Buddy</h2>
+            <h2 className="statement section__title">Shop YUYK</h2>
           </div>
           <a className="section__link" href="#shop">
             Pre-order Batch 1 &rarr;

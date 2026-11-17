@@ -43,7 +43,7 @@ app.use(vite.middlewares);
 
 const port = Number(process.env.PORT || 3000);
 server.listen(port, '0.0.0.0', () => {
-  console.log(`THANOS development server running at http://localhost:${port}`);
+  console.log(`YUYK development server running at http://localhost:${port}`);
 });
 
 const shutdown = async () => {

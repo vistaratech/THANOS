@@ -38,7 +38,7 @@ function MainContent() {
   }
 
   useEffect(() => {
-    // Dynamic theme switching on scroll matching Desktop Buddy's aesthetic
+    // Dynamic theme switching on scroll matching YUYK's aesthetic
     const themeSections = document.querySelectorAll('[data-theme]');
     if (!themeSections.length || !('IntersectionObserver' in window)) return;
 

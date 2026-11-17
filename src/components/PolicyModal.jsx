@@ -6,7 +6,7 @@ const POLICIES_DATA = {
     id: 'shipping',
     badge: 'Fast Pan-India Dispatch',
     title: 'Delivery & Shipping Policy',
-    intro: 'Every Desktop Buddy is assembled and tested with care in Vijayamangalam, Perundurai, Erode. Here is everything you need to know about delivery.',
+    intro: 'Every YUYK is assembled and tested with care in Vijayamangalam, Perundurai, Erode. Here is everything you need to know about delivery.',
     sections: [
       {
         heading: 'Shipping Rates & Free Delivery',
@@ -28,7 +28,7 @@ const POLICIES_DATA = {
       {
         heading: 'Order Tracking',
         content: [
-          'Once your Desktop Buddy is packaged and dispatched from our Erode studio, our team will send your tracking ID and live tracking link directly to your WhatsApp (+91 88833 88365).',
+          'Once your YUYK is packaged and dispatched from our Erode studio, our team will send your tracking ID and live tracking link directly to your WhatsApp (+91 88833 88365).',
           'You can message our WhatsApp number anytime to get instant live status updates on your parcel.'
         ]
       }
@@ -38,13 +38,13 @@ const POLICIES_DATA = {
     id: 'returns',
     badge: '100% Risk-Free Guarantee',
     title: '7-Day Hassle-Free Returns',
-    intro: 'We want you to love your Desktop Buddy. If anything is not 100% right, our 7-day return and exchange policy has you covered.',
+    intro: 'We want you to love your YUYK. If anything is not 100% right, our 7-day return and exchange policy has you covered.',
     sections: [
       {
         heading: '7-Day Return Window',
         content: [
           'You have 7 full calendar days from the date of delivery to request an exchange, replacement, or return.',
-          'Applicable if your Desktop Buddy arrives damaged, has a switch defect, or if you received an incorrect color variant.'
+          'Applicable if your YUYK arrives damaged, has a switch defect, or if you received an incorrect color variant.'
         ]
       },
       {
@@ -96,7 +96,7 @@ const POLICIES_DATA = {
     id: 'privacy',
     badge: 'Order Support · Data Privacy',
     title: 'Privacy Policy',
-    intro: 'Your trust is our top priority. We only collect the bare minimum details required to deliver your Desktop Buddy.',
+    intro: 'Your trust is our top priority. We only collect the bare minimum details required to deliver your YUYK.',
     sections: [
       {
         heading: 'Information We Collect',
@@ -128,12 +128,12 @@ const POLICIES_DATA = {
     id: 'terms',
     badge: 'Official Terms',
     title: 'Terms & Conditions',
-    intro: 'Please review the standard terms of using Desktop Buddy and ordering our products.',
+    intro: 'Please review the standard terms of using YUYK and ordering our products.',
     sections: [
       {
         heading: 'Store Information',
         content: [
-          'Desktop Buddy is an independent designer brand based in Vijayamangalam, Perundurai, Erode, Tamil Nadu 638056, India.',
+          'YUYK is an independent designer brand based in Vijayamangalam, Perundurai, Erode, Tamil Nadu 638056, India.',
           'Our products are designed as tactile mechanical desktop pets and fidget companions.'
         ]
       },
@@ -148,7 +148,7 @@ const POLICIES_DATA = {
         heading: 'Order Placement & WhatsApp Agreement',
         content: [
           'Orders initiated through the WhatsApp order form are verified directly by our customer team before dispatch.',
-          'Desktop Buddy reserves the right to cancel or pause orders in unserviceable pincodes with full notification to the customer.'
+          'YUYK reserves the right to cancel or pause orders in unserviceable pincodes with full notification to the customer.'
         ]
       },
       {
@@ -201,7 +201,7 @@ export default function PolicyModal() {
             <span className="pcard__badge" style={{ position: 'static', margin: 0 }}>
               Help &amp; Policies
             </span>
-            <h3>Desktop Buddy Info Center</h3>
+            <h3>YUYK Info Center</h3>
           </div>
           <button className="icon-btn" onClick={closePolicy} aria-label="Close modal">
             <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false" style={{ width: '18px', height: '18px' }}>
@@ -230,7 +230,7 @@ export default function PolicyModal() {
               <b>Need quick help?</b>
               <p>Chat directly with our Vijayamangalam studio team.</p>
               <a
-                href="https://wa.me/918883388365?text=Hi%20Desktop%20Buddy!%20I%20have%20a%20question%20about%20my%20order."
+                href="https://wa.me/918883388365?text=Hi%20YUYK!%20I%20have%20a%20question%20about%20my%20order."
                 target="_blank"
                 rel="noreferrer"
                 className="btn btn--sm wa-btn"
