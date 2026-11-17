@@ -27,7 +27,7 @@ export default function Statement() {
           <div
             className="render render--drop"
             style={{
-              transform: `translate(0, ${scrollProgress * -0.08}px) rotate(${16 + scrollProgress * 0.005}deg)`
+              transform: `translate(0, ${scrollProgress * -0.15}px) rotate(${28 + scrollProgress * 0.012}deg)`
             }}
           >
             <img
