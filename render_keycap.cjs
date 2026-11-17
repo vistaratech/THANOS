@@ -2,7 +2,7 @@ const sharp = require('sharp');
 const fs = require('fs');
 
 async function main() {
-  console.log('Rendering 3D Keycaps with letter D and pristine rounded dish borders...');
+  console.log('Rendering 3D Keycaps with letter Y and pristine rounded dish borders...');
 
   // 1. Process Colored Render (Hero)
   const { data: colData, info: colInfo } = await sharp('assets/keycap-e-colored-render.webp')
@@ -31,41 +31,35 @@ async function main() {
     .png()
     .toBuffer();
 
-  // Chunky mechanical uppercase D (width: 430, height: 480, centered at 795, 710)
-  const dOverlay = Buffer.from(`
+  // Chunky mechanical uppercase Y centered on the keycap
+  const yOverlay = Buffer.from(`
     <svg width="1600" height="1600" viewBox="0 0 1600 1600" xmlns="http://www.w3.org/2000/svg">
       <defs>
-        <filter id="d-shadow" x="-8%" y="-8%" width="120%" height="120%">
+        <filter id="y-shadow" x="-8%" y="-8%" width="120%" height="120%">
           <feDropShadow dx="0" dy="7" stdDeviation="5" flood-color="#000000" flood-opacity="0.20" />
         </filter>
       </defs>
-      <path filter="url(#d-shadow)"
-        d="M 580 470
-           L 910 470
-           L 1010 570
-           L 1010 850
-           L 910 950
-           L 580 950
-           Z
-           M 685 570
-           L 870 570
-           L 910 610
-           L 910 810
-           L 870 850
-           L 685 850
+      <path filter="url(#y-shadow)"
+        d="M 570 470
+           L 700 470
+           L 795 590
+           L 890 470
+           L 1020 470
+           L 850 685
+           L 850 950
+           L 740 950
+           L 740 685
            Z"
-        fill="#141414"
-        fill-rule="evenodd"
-      />
+        fill="#141414" />
     </svg>
   `);
 
   await sharp(cleanColoredBuffer)
-    .composite([{ input: dOverlay, top: 0, left: 0 }])
+    .composite([{ input: yOverlay, top: 0, left: 0 }])
     .webp({ quality: 96 })
-    .toFile('public/assets/keycap-d-colored-render.webp');
+    .toFile('public/assets/keycap-y-colored-render.webp');
 
-  console.log('Created public/assets/keycap-d-colored-render.webp');
+  console.log('Created public/assets/keycap-y-colored-render.webp');
 
   // 2. Process Filled Keycap (Statement)
   const { data: filledData, info: filledInfo } = await sharp('assets/keycap-e-filled-render.webp')
@@ -90,11 +84,11 @@ async function main() {
     .toBuffer();
 
   await sharp(cleanFilledBuffer)
-    .composite([{ input: dOverlay, top: 0, left: 0 }])
+    .composite([{ input: yOverlay, top: 0, left: 0 }])
     .webp({ quality: 96 })
-    .toFile('public/assets/keycap-d-filled-render.webp');
+    .toFile('public/assets/keycap-y-filled-render.webp');
 
-  console.log('Created public/assets/keycap-d-filled-render.webp');
+  console.log('Created public/assets/keycap-y-filled-render.webp');
 }
 
 main().catch(console.error);

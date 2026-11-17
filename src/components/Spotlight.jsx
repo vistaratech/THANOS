@@ -1,29 +1,55 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useCart } from '../context/CartContext';
 
 const GALLERY = [
   {
-    src: '/assets/desktop-buddy-main.jpg',
-    label: 'Happy ^_^',
-    alt: 'YUYK orange cube robot smiling face on desk'
+    src: '/assets/yuyk-expression-happy.webp',
+    label: 'Happy'
   },
   {
-    src: '/assets/desktop-buddy-wink.jpg',
-    label: 'Wink O_<',
-    alt: 'YUYK winking face'
+    src: '/assets/yuyk-expression-cool.webp',
+    label: 'Cool'
+  },
+  {
+    src: '/assets/yuyk-expression-angry.webp',
+    label: 'Angry'
+  },
+  {
+    src: '/assets/yuyk-expression-sleepy.webp',
+    label: 'Sleepy'
   }
 ];
 
 export default function Spotlight() {
   const { formatPrice, openColorModal } = useCart();
   const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  useEffect(() => {
+    const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setIsPlaying(!motionPreference.matches);
+
+    const handleMotionPreferenceChange = () => {
+      setIsPlaying(!motionPreference.matches);
+    };
+    motionPreference.addEventListener('change', handleMotionPreferenceChange);
+    return () => motionPreference.removeEventListener('change', handleMotionPreferenceChange);
+  }, []);
+
+  useEffect(() => {
+    if (!isPlaying) return undefined;
+    const timer = setInterval(() => {
+      setActiveImageIndex((current) => (current + 1) % GALLERY.length);
+    }, 2200);
+    return () => clearInterval(timer);
+  }, [isPlaying]);
 
   const product = {
     id: 'desktop-buddy-main',
     title: 'YUYK / pre-order.',
     price: 750,
     originalPrice: 999,
-    image: GALLERY[activeImageIndex].src,
+    image: '/assets/desktop-buddy-main.jpg',
     type: 'Tactile Desktop Pet'
   };
 
@@ -31,48 +57,52 @@ export default function Spotlight() {
     <div id="spotlight" className="shopify-section section-spotlight">
       <section className="spot" data-theme="ivory" aria-label="Spotlight Product">
         <div className="spot__media reveal is-in">
-          <div
-            style={{ cursor: 'pointer', overflow: 'hidden', borderRadius: '24px', position: 'relative' }}
+          <button
+            type="button"
+            className="spot__image-stage"
+            aria-label={`Choose YUYK, showing the ${GALLERY[activeImageIndex].label} expression`}
             onClick={() => openColorModal(product)}
           >
-            <img
-              src={GALLERY[activeImageIndex].src}
-              alt={GALLERY[activeImageIndex].alt}
-              width="1200"
-              height="1200"
-              style={{ width: '100%', height: 'auto', display: 'block', transition: 'all 0.3s ease' }}
-            />
+            {GALLERY.map((image, idx) => (
+              <img
+                key={image.label}
+                className={idx === activeImageIndex ? 'is-active' : ''}
+                src={image.src}
+                alt={idx === activeImageIndex ? `YUYK ${image.label.toLowerCase()} expression` : ''}
+                aria-hidden={idx !== activeImageIndex}
+                width="1200"
+                height="1200"
+              />
+            ))}
             <span className="pcard__badge">New · Batch 1</span>
-          </div>
+          </button>
 
           {/* Mini Expression Selector Gallery */}
-          <div style={{ display: 'flex', gap: '10px', marginTop: '14px', justifyContent: 'center' }}>
+          <div className="spot__gallery-controls">
             {GALLERY.map((img, idx) => (
               <button
-                key={idx}
+                key={img.label}
                 type="button"
-                onClick={() => setActiveImageIndex(idx)}
-                style={{
-                  width: '64px',
-                  height: '64px',
-                  borderRadius: '12px',
-                  overflow: 'hidden',
-                  padding: 0,
-                  border: activeImageIndex === idx ? '2.5px solid var(--ink)' : '1px solid rgba(20,20,20,0.18)',
-                  cursor: 'pointer',
-                  opacity: activeImageIndex === idx ? 1 : 0.65,
-                  transition: 'all 0.2s ease',
-                  background: '#fff'
+                className={`spot__expression-thumb ${activeImageIndex === idx ? 'is-active' : ''}`}
+                aria-label={`Show ${img.label.toLowerCase()} expression`}
+                aria-pressed={activeImageIndex === idx}
+                onClick={() => {
+                  setActiveImageIndex(idx);
+                  setIsPlaying(false);
                 }}
-                title={img.label}
               >
-                <img
-                  src={img.src}
-                  alt={img.label}
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                />
+                <img src={img.src} alt="" width="64" height="64" />
               </button>
             ))}
+            <button
+              type="button"
+              className="spot__motion-toggle"
+              onClick={() => setIsPlaying((playing) => !playing)}
+              aria-label={isPlaying ? 'Pause emotion animation' : 'Play emotion animation'}
+              aria-pressed={isPlaying}
+            >
+              {isPlaying ? 'Pause' : 'Play'}
+            </button>
           </div>
         </div>
 

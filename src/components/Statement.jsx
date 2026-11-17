@@ -31,7 +31,7 @@ export default function Statement() {
             }}
           >
             <img
-              src="/assets/keycap-d-filled-render.webp?v=4"
+              src="/assets/keycap-y-filled-render.webp?v=5"
               width="1600"
               height="1600"
               alt="Red mechanical keycap"

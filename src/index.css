@@ -608,11 +608,83 @@ ul, ol {
   width: 100%;
   aspect-ratio: 1;
   object-fit: cover;
-  transition: transform 0.8s var(--ease);
+  transition: opacity 0.45s ease, transform 0.8s var(--ease);
 }
 
-.spot__media:hover img {
+.spot__media:hover .spot__image-stage img {
   transform: scale(1.03);
+}
+
+.spot__image-stage {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  overflow: hidden;
+  aspect-ratio: 1;
+  background: var(--ivory-2);
+  text-align: left;
+}
+
+.spot__image-stage img {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  opacity: 0;
+}
+
+.spot__image-stage img.is-active {
+  opacity: 1;
+}
+
+.spot__gallery-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.spot__expression-thumb {
+  width: clamp(44px, 12vw, 64px);
+  aspect-ratio: 1;
+  overflow: hidden;
+  padding: 0;
+  border: 1px solid rgba(20, 20, 20, 0.18);
+  border-radius: 12px;
+  opacity: 0.65;
+  transition: opacity 0.2s ease, border-color 0.2s ease;
+}
+
+.spot__expression-thumb.is-active {
+  border: 2.5px solid var(--ink);
+  opacity: 1;
+}
+
+.spot__expression-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.spot__motion-toggle {
+  min-width: 56px;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 99px;
+  font-family: var(--mono);
+  font-size: 11px;
+  transition: background-color 0.2s ease;
+}
+
+.spot__motion-toggle:hover {
+  background: rgba(20, 20, 20, 0.06);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spot__media img {
+    transition: none;
+  }
 }
 
 .eyebrow {

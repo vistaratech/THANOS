@@ -50,7 +50,7 @@ const POLICIES_DATA = {
       {
         heading: 'How to Initiate a Return',
         content: [
-          'Step 1: Open WhatsApp and send a message to +91 88833 88365, or email hello@desktopbuddy.tech.',
+          'Step 1: Open WhatsApp and send a message to +91 88833 88365, or email contact.yuyk@gmail.com.',
           'Step 2: Share your order name and a quick photo/video of the issue.',
           'Step 3: Our team will verify and dispatch a free replacement or initiate reverse pickup immediately — no arguments, no hassle.'
         ]
@@ -119,7 +119,7 @@ const POLICIES_DATA = {
       {
         heading: 'Data Deletion Requests',
         content: [
-          'You may request complete removal of your phone number and address from our records anytime by messaging hello@desktopbuddy.tech or WhatsApp (+91 88833 88365).'
+          'You may request complete removal of your phone number and address from our records anytime by messaging contact.yuyk@gmail.com or WhatsApp (+91 88833 88365).'
         ]
       }
     ]
@@ -268,7 +268,7 @@ export default function PolicyModal() {
               </svg>
               <span>
                 Dispatched with care from Vijayamangalam, Perundurai, Erode, Tamil Nadu 638056, India.
-                For inquiries: <a href="mailto:hello@desktopbuddy.tech">hello@desktopbuddy.tech</a>
+                For inquiries: <a href="mailto:contact.yuyk@gmail.com">contact.yuyk@gmail.com</a>
               </span>
             </div>
           </main>

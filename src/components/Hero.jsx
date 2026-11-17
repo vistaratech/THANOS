@@ -34,7 +34,7 @@ export default function Hero() {
             }}
           >
             <img
-              src="/assets/keycap-d-colored-render.webp?v=4"
+              src="/assets/keycap-y-colored-render.webp?v=5"
               width="1600"
               height="1600"
               alt="YUYK keycap"

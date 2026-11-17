@@ -61,7 +61,7 @@ const POLICIES = {
       {
         title: 'How to Initiate a Return',
         content: [
-          '1. Message our team on WhatsApp at +91 88833 88365 or email hello@desktopbuddy.tech.',
+          '1. Message our team on WhatsApp at +91 88833 88365 or email contact.yuyk@gmail.com.',
           '2. Mention your customer name and attach a brief photo or video showing the defect or issue.',
           '3. Our Erode team will immediately approve a replacement or organize a reverse pickup. No complex forms or arguments.'
         ]
@@ -141,7 +141,7 @@ const POLICIES = {
       {
         title: 'Your Rights & Data Deletion',
         content: [
-          'You may request complete erasure of your contact details from our records at any time by messaging hello@desktopbuddy.tech or WhatsApp (+91 88833 88365).'
+          'You may request complete erasure of your contact details from our records at any time by messaging contact.yuyk@gmail.com or WhatsApp (+91 88833 88365).'
         ]
       }
     ]
@@ -313,7 +313,7 @@ export default function PolicyPage({ policyKey = 'privacy', onNavigate }) {
             </p>
             <div className="policy-contact-details">
               <span>📍 Vijayamangalam, Perundurai, Erode, Tamil Nadu 638056</span>
-              <span>📧 <a href="mailto:hello@desktopbuddy.tech">hello@desktopbuddy.tech</a></span>
+              <span>📧 <a href="mailto:contact.yuyk@gmail.com">contact.yuyk@gmail.com</a></span>
             </div>
           </div>
           <div>
