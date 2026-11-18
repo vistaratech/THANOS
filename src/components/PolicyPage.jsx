@@ -199,7 +199,43 @@ export default function PolicyPage({ policyKey = 'privacy', onNavigate }) {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
     document.title = `${policy.title} — YUYK`;
-  }, [policyKey, policy.title]);
+    const descriptionMeta = document.querySelector('meta[name="description"]');
+    const canonicalLink = document.querySelector('link[rel="canonical"]');
+    const openGraphTitle = document.querySelector('meta[property="og:title"]');
+    const openGraphDescription = document.querySelector('meta[property="og:description"]');
+    const openGraphUrl = document.querySelector('meta[property="og:url"]');
+    const twitterTitle = document.querySelector('meta[name="twitter:title"]');
+    const twitterDescription = document.querySelector('meta[name="twitter:description"]');
+    const pageUrl = `https://yuyk.in${window.location.pathname}`;
+
+    descriptionMeta?.setAttribute('content', policy.description);
+    canonicalLink?.setAttribute('href', pageUrl);
+    openGraphTitle?.setAttribute('content', `${policy.title} — YUYK`);
+    openGraphDescription?.setAttribute('content', policy.description);
+    openGraphUrl?.setAttribute('content', pageUrl);
+    twitterTitle?.setAttribute('content', `${policy.title} — YUYK`);
+    twitterDescription?.setAttribute('content', policy.description);
+
+    return () => {
+      document.title = 'YUYK | Expressive Desktop Pets from India';
+      descriptionMeta?.setAttribute(
+        'content',
+        'Meet YUYK, an expressive tactile desktop pet with animated pixel-face moods, handcrafted in Erode, India. Order online with pan-India delivery.'
+      );
+      canonicalLink?.setAttribute('href', 'https://yuyk.in/');
+      openGraphTitle?.setAttribute('content', 'YUYK | Expressive Desktop Pets from India');
+      openGraphDescription?.setAttribute(
+        'content',
+        'Meet YUYK, an expressive tactile desktop pet with animated pixel-face moods, handcrafted in Erode, India.'
+      );
+      openGraphUrl?.setAttribute('content', 'https://yuyk.in/');
+      twitterTitle?.setAttribute('content', 'YUYK | Expressive Desktop Pets from India');
+      twitterDescription?.setAttribute(
+        'content',
+        'An expressive tactile desktop pet with animated pixel-face moods, handcrafted in Erode, India.'
+      );
+    };
+  }, [policyKey, policy.title, policy.description]);
 
   const handleLinkClick = (e, path) => {
     e.preventDefault();

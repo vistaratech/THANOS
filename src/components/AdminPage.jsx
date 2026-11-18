@@ -148,6 +148,17 @@ export default function AdminPage() {
   const [loginLoading, setLoginLoading] = useState(false);
 
   useEffect(() => {
+    const robotsMeta = document.querySelector('meta[name="robots"]');
+    document.title = 'Admin Sign In — YUYK';
+    robotsMeta?.setAttribute('content', 'noindex,nofollow');
+
+    return () => {
+      document.title = 'YUYK | Expressive Desktop Pets from India';
+      robotsMeta?.setAttribute('content', 'index,follow,max-image-preview:large');
+    };
+  }, []);
+
+  useEffect(() => {
     let active = true;
     fetch('/api/admin/session', { credentials: 'same-origin' })
       .then(async (response) => {
