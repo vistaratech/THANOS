@@ -153,7 +153,7 @@ export default function AdminPage() {
     robotsMeta?.setAttribute('content', 'noindex,nofollow');
 
     return () => {
-      document.title = 'YUYK | Expressive Desktop Pets from India';
+      document.title = 'YUYK Desktop Pet | Animated Pixel-Mood Desk Companion';
       robotsMeta?.setAttribute('content', 'index,follow,max-image-preview:large');
     };
   }, []);

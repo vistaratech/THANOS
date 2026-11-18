@@ -44,16 +44,15 @@ export default function Hero() {
 
           {/* Kinetic Statement Typography */}
           <h1 className="statement hero__text animate-in">
-            <span className="ln"><span>Tech</span></span>
-            <span className="ln"><span>with</span></span>
-            <span className="ln"><span>perso-</span></span>
-            <span className="ln"><span>nality.</span></span>
+            <span className="ln"><span>YUYK</span></span>
+            <span className="ln"><span>desktop</span></span>
+            <span className="ln"><span>pet.</span></span>
           </h1>
 
           {/* Buy Callout */}
           <div className="hero__buy">
             <p className="hero__sub">
-              YUYK makes everyday devices fun to use, and makes sure you stand out in public.
+              Meet YUYK, a tactile desktop pet with animated pixel-face moods, handcrafted in Erode, Tamil Nadu.
             </p>
 
             <div className="hero__ctas">

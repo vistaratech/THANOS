@@ -15,30 +15,35 @@ export const CURRENCY_RATES = {
 
 export const FREE_DELIVERY_THRESHOLD = 1000; // in INR
 
-export function CartProvider({ children }) {
-  const [cart, setCart] = useState(() => {
-    try {
-      const saved = localStorage.getItem('desktop_buddy_cart');
-      return saved ? JSON.parse(saved) : [];
-    } catch {
-      return [];
-    }
-  });
+export function CartProvider({ children, initialPath }) {
+  const [cart, setCart] = useState([]);
+  const [hasLoadedStorage, setHasLoadedStorage] = useState(false);
 
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [currency, setCurrency] = useState('INR');
-  const [promoCode, setPromoCode] = useState(() => {
-    try {
-      return localStorage.getItem('desktop_buddy_promo') || '';
-    } catch {
-      return '';
-    }
-  });
+  const [promoCode, setPromoCode] = useState('');
   const [toastMessage, setToastMessage] = useState('');
   const [toastVisible, setToastVisible] = useState(false);
   const [selectedProductForModal, setSelectedProductForModal] = useState(null);
   const [activePolicyTab, setActivePolicyTab] = useState(null);
-  const [currentPath, setCurrentPath] = useState(() => window.location.pathname);
+  const [currentPath, setCurrentPath] = useState(() => (
+    initialPath || (typeof window !== 'undefined' ? window.location.pathname : '/')
+  ));
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('desktop_buddy_cart');
+      if (saved) setCart(JSON.parse(saved));
+    } catch (error) {
+      console.error(error);
+    }
+    try {
+      setPromoCode(localStorage.getItem('desktop_buddy_promo') || '');
+    } catch (error) {
+      console.error(error);
+    }
+    setHasLoadedStorage(true);
+  }, []);
 
   useEffect(() => {
     const handlePopState = () => {
@@ -65,12 +70,13 @@ export function CartProvider({ children }) {
   };
 
   useEffect(() => {
+    if (!hasLoadedStorage) return;
     try {
       localStorage.setItem('desktop_buddy_cart', JSON.stringify(cart));
     } catch (e) {
       console.error(e);
     }
-  }, [cart]);
+  }, [cart, hasLoadedStorage]);
 
   useEffect(() => {
     if (isCartOpen) {

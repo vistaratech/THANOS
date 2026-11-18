@@ -120,9 +120,9 @@ function MainContent() {
   );
 }
 
-export default function App() {
+export default function App({ initialPath }) {
   return (
-    <CartProvider>
+    <CartProvider initialPath={initialPath}>
       <MainContent />
     </CartProvider>
   );

@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /api/
 
-Sitemap: https://yuyk.in/sitemap.xml
+Sitemap: https://www.yuyk.in/sitemap.xml

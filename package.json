@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "node server/dev.js",
     "dev:frontend": "vite",
-    "build": "vite build",
+    "build": "vite build && node prerender-seo.mjs",
     "test": "node --test",
     "preview": "vite preview"
   },

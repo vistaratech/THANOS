@@ -111,7 +111,7 @@ export default function Spotlight() {
             <span className="dot"></span>Just launched · Made in Erode
           </p>
           <h2 className="statement spot__name">
-            YUYK / pre-order.
+            YUYK Desktop Pet
           </h2>
           <p className="spot__tagline">
             The expressive desktop pet that gives your workspace some personality. Features multiple animated pixel faces, chunky tactile feel, and mood expressions.
