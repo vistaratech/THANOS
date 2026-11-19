@@ -2100,6 +2100,46 @@ ul, ol {
   box-shadow: 0 6px 18px rgba(37, 211, 102, 0.45) !important;
 }
 
+.razorpay-btn {
+  background: var(--red) !important;
+  color: #fff !important;
+  border: none !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  box-shadow: 0 4px 14px rgba(235, 78, 43, 0.35) !important;
+  transition: all 0.2s ease !important;
+}
+
+.razorpay-btn:hover {
+  background: #d43b17 !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 6px 18px rgba(235, 78, 43, 0.45) !important;
+}
+
+.payment-card--rzp.is-selected {
+  border-color: var(--red);
+  background: rgba(235, 78, 43, 0.05);
+}
+
+.payment-card--rzp input[type="radio"] {
+  accent-color: var(--red);
+}
+
+.rzp-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(235, 78, 43, 0.12);
+  color: var(--red);
+  padding: 2px 7px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
 /* Policy & Help Modal Styles */
 .policy-overlay {
   background: rgba(0, 0, 0, 0.55);

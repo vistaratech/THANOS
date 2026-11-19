@@ -7,6 +7,8 @@ import adminLogoutHandler from '../api/admin/logout.js';
 import adminOrdersHandler from '../api/admin/orders.js';
 import adminOrderHandler from '../api/admin/orders/[id].js';
 import adminSessionHandler from '../api/admin/session.js';
+import razorpayCreateOrderHandler from '../api/razorpay/create-order.js';
+import razorpayVerifyPaymentHandler from '../api/razorpay/verify-payment.js';
 
 const app = express();
 const server = createServer(app);
@@ -17,6 +19,8 @@ for (const [key, value] of Object.entries(localEnv)) {
 
 app.use(express.json({ limit: '32kb' }));
 app.post('/api/orders', orderHandler);
+app.post('/api/razorpay/create-order', razorpayCreateOrderHandler);
+app.post('/api/razorpay/verify-payment', razorpayVerifyPaymentHandler);
 app.post('/api/admin/login', adminLoginHandler);
 app.post('/api/admin/logout', adminLogoutHandler);
 app.get('/api/admin/session', adminSessionHandler);

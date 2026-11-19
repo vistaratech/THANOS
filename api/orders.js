@@ -32,7 +32,7 @@ export default async function handler(req, res) {
     await sql`
       INSERT INTO desktop_buddy_orders (
         id, customer_name, phone, address, city, pincode, customer_notes,
-        items, subtotal, delivery_fee, total, promo_code
+        items, subtotal, delivery_fee, total, promo_code, payment_method, payment_status
       ) VALUES (
         ${order.id}::uuid,
         ${order.customer.name},
@@ -45,7 +45,9 @@ export default async function handler(req, res) {
         ${order.subtotal},
         ${order.deliveryFee},
         ${order.total},
-        ${order.promoCode}
+        ${order.promoCode},
+        'whatsapp',
+        'pending'
       )
     `;
     return res.status(201).json({ orderId: order.id });

@@ -1,9 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { createHmac } from 'node:crypto';
 import {
   getAdminSession,
   createAdminSession,
-  parseOrder
+  parseOrder,
+  verifyRazorpaySignature
 } from '../src/server/orderApi.js';
 
 const customer = {
@@ -79,5 +81,56 @@ test('admin session signatures reject tampering', (t) => {
   assert.equal(
     getAdminSession({ headers: { cookie: `desktop_buddy_admin=${token}x` } }),
     null
+  );
+});
+
+test('razorpay payment signature validation validates and rejects tampering', (t) => {
+  const previousKeyId = process.env.RAZORPAY_KEY_ID;
+  const previousSecret = process.env.RAZORPAY_KEY_SECRET;
+
+  t.after(() => {
+    if (previousKeyId === undefined) delete process.env.RAZORPAY_KEY_ID;
+    else process.env.RAZORPAY_KEY_ID = previousKeyId;
+    if (previousSecret === undefined) delete process.env.RAZORPAY_KEY_SECRET;
+    else process.env.RAZORPAY_KEY_SECRET = previousSecret;
+  });
+
+  process.env.RAZORPAY_KEY_ID = 'rzp_test_1234567890';
+  process.env.RAZORPAY_KEY_SECRET = 'secret_test_key_abc123';
+
+  const orderId = 'order_DAKtest123';
+  const paymentId = 'pay_DAKtest456';
+  const validSignature = createHmac('sha256', 'secret_test_key_abc123')
+    .update(`${orderId}|${paymentId}`)
+    .digest('hex');
+
+  // Valid signature
+  assert.equal(
+    verifyRazorpaySignature({
+      razorpayOrderId: orderId,
+      razorpayPaymentId: paymentId,
+      razorpaySignature: validSignature
+    }),
+    true
+  );
+
+  // Tampered signature
+  assert.equal(
+    verifyRazorpaySignature({
+      razorpayOrderId: orderId,
+      razorpayPaymentId: paymentId,
+      razorpaySignature: validSignature.replace(/.$/, 'a') === validSignature ? 'tampered' : validSignature.replace(/.$/, 'a')
+    }),
+    false
+  );
+
+  // Tampered paymentId
+  assert.equal(
+    verifyRazorpaySignature({
+      razorpayOrderId: orderId,
+      razorpayPaymentId: 'pay_different',
+      razorpaySignature: validSignature
+    }),
+    false
   );
 });

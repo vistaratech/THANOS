@@ -78,9 +78,22 @@ export function ensureSchema(sql) {
           status TEXT NOT NULL DEFAULT 'new'
             CHECK (status IN ('new', 'confirmed', 'processing', 'shipped', 'delivered', 'cancelled')),
           admin_note TEXT NOT NULL DEFAULT '',
+          payment_method TEXT NOT NULL DEFAULT 'whatsapp',
+          payment_status TEXT NOT NULL DEFAULT 'pending',
+          razorpay_order_id TEXT,
+          razorpay_payment_id TEXT,
+          razorpay_signature TEXT,
           created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
           updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
         )
+      `;
+      await sql`
+        ALTER TABLE desktop_buddy_orders
+        ADD COLUMN IF NOT EXISTS payment_method TEXT NOT NULL DEFAULT 'whatsapp',
+        ADD COLUMN IF NOT EXISTS payment_status TEXT NOT NULL DEFAULT 'pending',
+        ADD COLUMN IF NOT EXISTS razorpay_order_id TEXT,
+        ADD COLUMN IF NOT EXISTS razorpay_payment_id TEXT,
+        ADD COLUMN IF NOT EXISTS razorpay_signature TEXT
       `;
       await sql`
         CREATE INDEX IF NOT EXISTS desktop_buddy_orders_created_at_idx
@@ -193,10 +206,59 @@ export function verifyAdminConfiguration() {
   }
 }
 
-function constantTimeEqual(left, right) {
+export function constantTimeEqual(left, right) {
+  if (typeof left !== 'string' || typeof right !== 'string') return false;
   const leftDigest = createHash('sha256').update(left).digest();
   const rightDigest = createHash('sha256').update(right).digest();
   return timingSafeEqual(leftDigest, rightDigest);
+}
+
+export function getRazorpayCredentials() {
+  const keyId = process.env.RAZORPAY_KEY_ID;
+  const keySecret = process.env.RAZORPAY_KEY_SECRET;
+  if (!keyId || !keySecret) {
+    throw new ApiError(503, 'Razorpay payments are not configured yet. Please configure RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET.');
+  }
+  return { keyId, keySecret };
+}
+
+export async function createRazorpayOrder({ order, keyId, keySecret }) {
+  const auth = Buffer.from(`${keyId}:${keySecret}`).toString('base64');
+  const response = await fetch('https://api.razorpay.com/v1/orders', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Basic ${auth}`
+    },
+    body: JSON.stringify({
+      amount: Math.round(order.total * 100), // paise
+      currency: 'INR',
+      receipt: String(order.id).slice(0, 40),
+      notes: {
+        orderId: String(order.id),
+        customerName: order.customer.name,
+        phone: order.customer.phone
+      }
+    })
+  });
+
+  const data = await response.json().catch(() => null);
+  if (!response.ok) {
+    console.error('Razorpay API error:', data);
+    const desc = data?.error?.description || 'Failed to initialize payment with Razorpay.';
+    throw new ApiError(response.status >= 500 ? 503 : 400, desc);
+  }
+  return data;
+}
+
+export function verifyRazorpaySignature({ razorpayOrderId, razorpayPaymentId, razorpaySignature }) {
+  const { keySecret } = getRazorpayCredentials();
+  if (!razorpayOrderId || !razorpayPaymentId || !razorpaySignature) {
+    return false;
+  }
+  const payload = `${razorpayOrderId}|${razorpayPaymentId}`;
+  const generatedSignature = createHmac('sha256', keySecret).update(payload).digest('hex');
+  return constantTimeEqual(generatedSignature, razorpaySignature);
 }
 
 export function verifyAdminCredentials(username, password) {
@@ -306,6 +368,10 @@ export function toClientOrder(row) {
     promoCode: row.promo_code,
     status: row.status,
     adminNote: row.admin_note,
+    paymentMethod: row.payment_method || 'whatsapp',
+    paymentStatus: row.payment_status || 'pending',
+    razorpayOrderId: row.razorpay_order_id || null,
+    razorpayPaymentId: row.razorpay_payment_id || null,
     createdAt: new Date(row.created_at).toISOString(),
     updatedAt: new Date(row.updated_at).toISOString()
   };

@@ -74,9 +74,16 @@ function OrderCard({ order, onSave }) {
           <strong>#{order.id.slice(0, 8).toUpperCase()}</strong>
           <time dateTime={order.createdAt}>{formatDate(order.createdAt)}</time>
         </div>
-        <span className={`admin-status admin-status--${order.status}`}>
-          {STATUSES.find(([value]) => value === order.status)?.[1] || order.status}
-        </span>
+        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+          <span className={`admin-status ${order.paymentStatus === 'paid' ? 'admin-status--delivered' : 'admin-status--new'}`}>
+            {order.paymentMethod === 'razorpay'
+              ? (order.paymentStatus === 'paid' ? '💳 Razorpay: PAID' : '💳 Razorpay: PENDING')
+              : '💬 WhatsApp: PENDING'}
+          </span>
+          <span className={`admin-status admin-status--${order.status}`}>
+            {STATUSES.find(([value]) => value === order.status)?.[1] || order.status}
+          </span>
+        </div>
       </header>
 
       <div className="admin-order__grid">
@@ -88,6 +95,11 @@ function OrderCard({ order, onSave }) {
             {order.customer.address}, {order.customer.city} - {order.customer.pincode}
           </p>
           {order.customer.notes && <p className="admin-muted">Customer note: {order.customer.notes}</p>}
+          {order.razorpayPaymentId && (
+            <p className="admin-muted" style={{ fontFamily: 'var(--mono)', fontSize: '11px', marginTop: '6px' }}>
+              Razorpay ID: <b>{order.razorpayPaymentId}</b>
+            </p>
+          )}
         </section>
 
         <section>

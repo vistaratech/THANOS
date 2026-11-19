@@ -19,6 +19,7 @@ export default function CartDrawer() {
 
   const [inputCode, setInputCode] = useState('');
   const [step, setStep] = useState('cart'); // 'cart' | 'shipping' | 'success'
+  const [paymentMethod, setPaymentMethod] = useState('razorpay'); // 'razorpay' | 'whatsapp'
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState('');
   const [formData, setFormData] = useState({
@@ -50,8 +51,159 @@ export default function CartDrawer() {
     setSubmitError('');
   };
 
+  const ensureRazorpayLoaded = () => {
+    return new Promise((resolve) => {
+      if (typeof window !== 'undefined' && window.Razorpay) {
+        return resolve(true);
+      }
+      const existingScript = document.querySelector('script[src*="checkout.razorpay.com"]');
+      if (existingScript) {
+        existingScript.addEventListener('load', () => resolve(true), { once: true });
+        existingScript.addEventListener('error', () => resolve(false), { once: true });
+        return;
+      }
+      const script = document.createElement('script');
+      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+      script.async = true;
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+  };
+
+  const handleRazorpayCheckout = async (e) => {
+    if (e) e.preventDefault();
+    if (isSubmitting) return;
+
+    if (
+      !formData.name.trim() ||
+      !formData.phone.trim() ||
+      !formData.address.trim() ||
+      !formData.city.trim() ||
+      !formData.pincode.trim()
+    ) {
+      setSubmitError('Please fill in your name, phone number, address, city, and pincode.');
+      return;
+    }
+
+    if (!/^\d{6}$/.test(formData.pincode.trim())) {
+      setSubmitError('Please enter a valid 6-digit Indian pincode.');
+      return;
+    }
+
+    setIsSubmitting(true);
+    setSubmitError('');
+
+    try {
+      const isLoaded = await ensureRazorpayLoaded();
+      if (!isLoaded || !window.Razorpay) {
+        throw new Error('Payment gateway could not be loaded. Please check your internet connection or use WhatsApp order.');
+      }
+
+      // Step 1: Create Razorpay order on server
+      const response = await fetch('/api/razorpay/create-order', {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          customer: formData,
+          items: cart.map(({ id, variant, quantity }) => ({ id, variant, quantity })),
+          promoCode
+        })
+      });
+
+      let orderPayload;
+      try {
+        orderPayload = await response.json();
+      } catch {
+        throw new Error('The payment server returned an invalid response. Your cart is unchanged.');
+      }
+
+      if (!response.ok) {
+        throw new Error(orderPayload.error || 'Failed to initialize payment.');
+      }
+
+      // Step 2: Open Razorpay checkout modal
+      const options = {
+        key: orderPayload.keyId,
+        amount: orderPayload.amount,
+        currency: orderPayload.currency || 'INR',
+        name: 'YUYK',
+        description: 'Tactile Desktop Pet Order',
+        image: '/assets/favicon.svg',
+        order_id: orderPayload.razorpayOrderId,
+        prefill: {
+          name: formData.name.trim(),
+          contact: formData.phone.trim()
+        },
+        notes: {
+          address: `${formData.address.trim()}, ${formData.city.trim()} - ${formData.pincode.trim()}`,
+          notes: formData.notes.trim()
+        },
+        theme: {
+          color: '#ff5c35'
+        },
+        modal: {
+          ondismiss: () => {
+            setIsSubmitting(false);
+          }
+        },
+        handler: async (paymentResponse) => {
+          try {
+            setIsSubmitting(true);
+            const verifyRes = await fetch('/api/razorpay/verify-payment', {
+              method: 'POST',
+              credentials: 'same-origin',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                orderId: orderPayload.orderId,
+                razorpay_order_id: paymentResponse.razorpay_order_id,
+                razorpay_payment_id: paymentResponse.razorpay_payment_id,
+                razorpay_signature: paymentResponse.razorpay_signature
+              })
+            });
+
+            const verifyData = await verifyRes.json();
+            if (!verifyRes.ok) {
+              throw new Error(verifyData.error || 'Payment verification failed.');
+            }
+
+            try {
+              const confetti = (await import('canvas-confetti')).default;
+              confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+            } catch {}
+
+            setLastOrderDetails({
+              customer: formData.name,
+              total: finalTotal,
+              orderId: orderPayload.orderId,
+              paymentId: paymentResponse.razorpay_payment_id,
+              paymentMethod: 'razorpay'
+            });
+            setStep('success');
+            clearCart();
+          } catch (err) {
+            setSubmitError(err.message || 'Payment received, but verification failed. Please contact us on WhatsApp.');
+          } finally {
+            setIsSubmitting(false);
+          }
+        }
+      };
+
+      const rzpInstance = new window.Razorpay(options);
+      rzpInstance.on('payment.failed', (resp) => {
+        setIsSubmitting(false);
+        setSubmitError(`Payment failed: ${resp.error?.description || 'Transaction was declined.'}`);
+      });
+      rzpInstance.open();
+    } catch (error) {
+      setIsSubmitting(false);
+      setSubmitError(error.message || 'Could not initiate payment. Please try again or use WhatsApp order.');
+    }
+  };
+
   const handlePlaceWhatsAppOrder = async (e) => {
-    e.preventDefault();
+    if (e) e.preventDefault();
 
     if (isSubmitting) return;
     if (
@@ -62,6 +214,11 @@ export default function CartDrawer() {
       !formData.pincode.trim()
     ) {
       setSubmitError('Please fill in your name, phone number, address, city, and pincode.');
+      return;
+    }
+
+    if (!/^\d{6}$/.test(formData.pincode.trim())) {
+      setSubmitError('Please enter a valid 6-digit Indian pincode.');
       return;
     }
 
@@ -130,7 +287,8 @@ Hi team! I would like to order this. Please contact me with confirmation and del
         customer: formData.name,
         total: finalTotal,
         orderId: payload.orderId,
-        whatsappUrl
+        whatsappUrl,
+        paymentMethod: 'whatsapp'
       });
       setStep('success');
       clearCart();
@@ -139,6 +297,15 @@ Hi team! I would like to order this. Please contact me with confirmation and del
       setSubmitError(error.message || 'The order could not be saved. Your cart is unchanged.');
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handleSubmitOrder = (e) => {
+    e.preventDefault();
+    if (paymentMethod === 'razorpay') {
+      handleRazorpayCheckout(e);
+    } else {
+      handlePlaceWhatsAppOrder(e);
     }
   };
 
@@ -292,19 +459,76 @@ Hi team! I would like to order this. Please contact me with confirmation and del
             </>
           )}
 
-          {/* STEP 2: SHIPPING & WHATSAPP CHECKOUT FORM */}
+          {/* STEP 2: SHIPPING & CHECKOUT FORM */}
           {step === 'shipping' && (
-            <form id="whatsapp-order-form" onSubmit={handlePlaceWhatsAppOrder} className="checkout-form">
+            <form id="checkout-order-form" onSubmit={handleSubmitOrder} className="checkout-form">
               {submitError && <p className="checkout-error" role="alert">{submitError}</p>}
-              <div className="checkout-intro">
-                <span className="wa-pill">
-                  <span className="wa-dot"></span> WhatsApp Direct Order
-                </span>
-                <p>
-                  Fill in your delivery address below. Your order request will be saved for fulfillment before WhatsApp opens. <b>Our team will contact you directly to confirm your order and delivery details!</b>{' '}
-                  <a href="/privacy">Privacy Policy</a>
-                </p>
+
+              {/* Payment Method Selector */}
+              <div className="form-group" style={{ marginBottom: '4px' }}>
+                <label>Choose Payment Method *</label>
+                <div className="payment-options">
+                  <label
+                    className={`payment-card payment-card--rzp ${paymentMethod === 'razorpay' ? 'is-selected' : ''}`}
+                    onClick={() => setPaymentMethod('razorpay')}
+                  >
+                    <input
+                      type="radio"
+                      name="paymentMethod"
+                      value="razorpay"
+                      checked={paymentMethod === 'razorpay'}
+                      onChange={() => setPaymentMethod('razorpay')}
+                    />
+                    <div className="payment-card__content" style={{ flex: 1 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+                        <b>Pay Online (Razorpay)</b>
+                        <span className="rzp-badge">⚡ Instant</span>
+                      </div>
+                      <span>UPI (GPay / PhonePe / Paytm), Cards, NetBanking</span>
+                    </div>
+                  </label>
+
+                  <label
+                    className={`payment-card ${paymentMethod === 'whatsapp' ? 'is-selected' : ''}`}
+                    onClick={() => setPaymentMethod('whatsapp')}
+                  >
+                    <input
+                      type="radio"
+                      name="paymentMethod"
+                      value="whatsapp"
+                      checked={paymentMethod === 'whatsapp'}
+                      onChange={() => setPaymentMethod('whatsapp')}
+                    />
+                    <div className="payment-card__content">
+                      <b>WhatsApp Direct Order</b>
+                      <span>Pre-order &amp; confirm delivery via WhatsApp chat</span>
+                    </div>
+                  </label>
+                </div>
               </div>
+
+              {/* Mode intro info */}
+              {paymentMethod === 'razorpay' ? (
+                <div className="checkout-intro" style={{ background: 'rgba(235, 78, 43, 0.08)', borderColor: 'rgba(235, 78, 43, 0.25)' }}>
+                  <span className="wa-pill" style={{ background: 'var(--red)' }}>
+                    🔒 100% Secure Checkout
+                  </span>
+                  <p>
+                    Pay securely with <b>Razorpay</b> via UPI, Card, or NetBanking. Once paid, your order is automatically confirmed and dispatched from our Erode studio.{' '}
+                    <a href="/privacy" target="_blank" rel="noreferrer">Privacy Policy</a>
+                  </p>
+                </div>
+              ) : (
+                <div className="checkout-intro">
+                  <span className="wa-pill">
+                    <span className="wa-dot"></span> WhatsApp Direct Order
+                  </span>
+                  <p>
+                    Fill in your delivery address below. Your order request will be saved before WhatsApp opens. <b>Our team will contact you directly to confirm delivery!</b>{' '}
+                    <a href="/privacy" target="_blank" rel="noreferrer">Privacy Policy</a>
+                  </p>
+                </div>
+              )}
 
               <div className="form-group">
                 <label htmlFor="customer-name">Full Name *</label>
@@ -398,25 +622,65 @@ Hi team! I would like to order this. Please contact me with confirmation and del
           {step === 'success' && (
             <div className="cart__empty" style={{ textAlign: 'center', padding: '30px 10px' }}>
               <div style={{ fontSize: '54px', marginBottom: '12px' }}>🎉</div>
-              <h3 style={{ fontSize: '26px', marginBottom: '8px' }}>Request Sent via WhatsApp!</h3>
-              <p style={{ color: 'var(--soft)', fontSize: '15px', lineHeight: 1.5, marginBottom: '24px' }}>
-                Thank you, <b>{lastOrderDetails?.customer}</b>! Order request <b>#{lastOrderDetails?.orderId?.slice(0, 8).toUpperCase()}</b> was saved. Use the button below to open WhatsApp and send it to <b>+91 88833 88365</b>; our team will contact you to confirm.
-              </p>
 
-              {lastOrderDetails?.whatsappUrl && (
-                <div style={{ marginBottom: '20px' }}>
-                  <a
-                    href={lastOrderDetails.whatsappUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="btn btn--block btn--lg wa-btn"
-                  >
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" style={{ marginRight: '8px' }}>
-                      <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2zM12.05 20.21c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31c-.82-1.31-1.26-2.83-1.26-4.4 0-4.54 3.7-8.24 8.24-8.24 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.83c.01 4.54-3.68 8.25-8.22 8.25zm4.52-6.17c-.25-.12-1.47-.72-1.7-.81-.23-.08-.39-.12-.56.12-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.14.17-.25.25-.41.08-.17.04-.31-.02-.43s-.56-1.34-.76-1.84c-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.86.84-.86 2.05s.88 2.38 1 2.54c.12.17 1.73 2.64 4.2 3.7.59.25 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.15-1.18-.06-.11-.22-.17-.47-.29z"/>
-                    </svg>
-                    Re-open WhatsApp Chat
-                  </a>
-                </div>
+              {lastOrderDetails?.paymentMethod === 'razorpay' ? (
+                <>
+                  <span className="wa-pill" style={{ background: '#0e8a16', marginBottom: '12px', display: 'inline-block' }}>
+                    ✓ Payment Verified · Paid
+                  </span>
+                  <h3 style={{ fontSize: '26px', marginBottom: '8px' }}>Payment Successful!</h3>
+                  <p style={{ color: 'var(--soft)', fontSize: '15px', lineHeight: 1.5, marginBottom: '16px' }}>
+                    Thank you, <b>{lastOrderDetails?.customer}</b>! Your order <b>#{lastOrderDetails?.orderId?.slice(0, 8).toUpperCase()}</b> has been confirmed.
+                    {lastOrderDetails?.paymentId && (
+                      <span style={{ display: 'block', fontSize: '12px', marginTop: '6px', fontFamily: 'var(--mono)', color: 'var(--ink)' }}>
+                        Payment ID: {lastOrderDetails.paymentId}
+                      </span>
+                    )}
+                  </p>
+
+                  <div style={{ background: 'rgba(20,20,20,0.04)', borderRadius: '12px', padding: '14px', marginBottom: '20px', textAlign: 'left', fontSize: '13px', lineHeight: 1.6 }}>
+                    <div>🏭 <b>Dispatching from:</b> Vijayamangalam, Erode (TN)</div>
+                    <div>📦 <b>Estimated Delivery:</b> 2 to 4 business days</div>
+                    <div>🚚 <b>Couriers:</b> Blue Dart, Delhivery, DTDC, India Post</div>
+                  </div>
+
+                  <div style={{ marginBottom: '16px' }}>
+                    <a
+                      href={`https://wa.me/918883388365?text=${encodeURIComponent(`Hi YUYK team! I have completed payment for Order #${lastOrderDetails?.orderId?.slice(0, 8).toUpperCase()} (Payment ID: ${lastOrderDetails?.paymentId}). Please share dispatch tracking when ready!`)}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="btn btn--block btn--lg wa-btn"
+                    >
+                      <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" style={{ marginRight: '8px' }}>
+                        <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2zM12.05 20.21c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31c-.82-1.31-1.26-2.83-1.26-4.4 0-4.54 3.7-8.24 8.24-8.24 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.83c.01 4.54-3.68 8.25-8.22 8.25zm4.52-6.17c-.25-.12-1.47-.72-1.7-.81-.23-.08-.39-.12-.56.12-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.14.17-.25.25-.41.08-.17.04-.31-.02-.43s-.56-1.34-.76-1.84c-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.86.84-.86 2.05s.88 2.38 1 2.54c.12.17 1.73 2.64 4.2 3.7.59.25 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.15-1.18-.06-.11-.22-.17-.47-.29z"/>
+                      </svg>
+                      Get Tracking Updates on WhatsApp
+                    </a>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <h3 style={{ fontSize: '26px', marginBottom: '8px' }}>Request Sent via WhatsApp!</h3>
+                  <p style={{ color: 'var(--soft)', fontSize: '15px', lineHeight: 1.5, marginBottom: '24px' }}>
+                    Thank you, <b>{lastOrderDetails?.customer}</b>! Order request <b>#{lastOrderDetails?.orderId?.slice(0, 8).toUpperCase()}</b> was saved. Use the button below to open WhatsApp and send it to <b>+91 88833 88365</b>; our team will contact you to confirm.
+                  </p>
+
+                  {lastOrderDetails?.whatsappUrl && (
+                    <div style={{ marginBottom: '20px' }}>
+                      <a
+                        href={lastOrderDetails.whatsappUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="btn btn--block btn--lg wa-btn"
+                      >
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" style={{ marginRight: '8px' }}>
+                          <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2zM12.05 20.21c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31c-.82-1.31-1.26-2.83-1.26-4.4 0-4.54 3.7-8.24 8.24-8.24 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.83c.01 4.54-3.68 8.25-8.22 8.25zm4.52-6.17c-.25-.12-1.47-.72-1.7-.81-.23-.08-.39-.12-.56.12-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.14.17-.25.25-.41.08-.17.04-.31-.02-.43s-.56-1.34-.76-1.84c-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.86.84-.86 2.05s.88 2.38 1 2.54c.12.17 1.73 2.64 4.2 3.7.59.25 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.15-1.18-.06-.11-.22-.17-.47-.29z"/>
+                        </svg>
+                        Re-open WhatsApp Chat
+                      </a>
+                    </div>
+                  )}
+                </>
               )}
 
               <button
@@ -455,25 +719,44 @@ Hi team! I would like to order this. Please contact me with confirmation and del
             </button>
 
             <p className="cart__assure">
-              Order via WhatsApp · Our team contacts you directly to confirm
+              Instant Online Payment (Razorpay) or Direct WhatsApp Order
             </p>
           </footer>
         )}
 
         {step === 'shipping' && (
           <footer className="cart__foot">
-            <button
-              type="submit"
-              form="whatsapp-order-form"
-              className="btn btn--block btn--lg wa-btn"
-            >
-              <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" style={{ marginRight: '8px' }}>
-                <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2zM12.05 20.21c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31c-.82-1.31-1.26-2.83-1.26-4.4 0-4.54 3.7-8.24 8.24-8.24 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.83c.01 4.54-3.68 8.25-8.22 8.25zm4.52-6.17c-.25-.12-1.47-.72-1.7-.81-.23-.08-.39-.12-.56.12-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.14.17-.25.25-.41.08-.17.04-.31-.02-.43s-.56-1.34-.76-1.84c-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.86.84-.86 2.05s.88 2.38 1 2.54c.12.17 1.73 2.64 4.2 3.7.59.25 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.15-1.18-.06-.11-.22-.17-.47-.29z"/>
-              </svg>
-              {isSubmitting ? 'Saving order…' : `Send Request on WhatsApp · ${formatPrice(finalTotal)}`}
-            </button>
+            {paymentMethod === 'razorpay' ? (
+              <button
+                type="submit"
+                form="checkout-order-form"
+                disabled={isSubmitting}
+                className="btn btn--block btn--lg razorpay-btn"
+              >
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '6px' }}>
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+                {isSubmitting ? 'Opening Razorpay…' : `Pay ${formatPrice(finalTotal)} with UPI / Cards`}
+              </button>
+            ) : (
+              <button
+                type="submit"
+                form="checkout-order-form"
+                disabled={isSubmitting}
+                className="btn btn--block btn--lg wa-btn"
+              >
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" style={{ marginRight: '8px' }}>
+                  <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2zM12.05 20.21c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31c-.82-1.31-1.26-2.83-1.26-4.4 0-4.54 3.7-8.24 8.24-8.24 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.83c.01 4.54-3.68 8.25-8.22 8.25zm4.52-6.17c-.25-.12-1.47-.72-1.7-.81-.23-.08-.39-.12-.56.12-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.14.17-.25.25-.41.08-.17.04-.31-.02-.43s-.56-1.34-.76-1.84c-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.86.84-.86 2.05s.88 2.38 1 2.54c.12.17 1.73 2.64 4.2 3.7.59.25 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.15-1.18-.06-.11-.22-.17-.47-.29z"/>
+                </svg>
+                {isSubmitting ? 'Saving order…' : `Send Request on WhatsApp · ${formatPrice(finalTotal)}`}
+              </button>
+            )}
+
             <p className="cart__assure" style={{ textAlign: 'center', fontSize: '12px' }}>
-              Our Erode team will reach out on WhatsApp (+91 88833 88365) to confirm & dispatch
+              {paymentMethod === 'razorpay'
+                ? '🔒 100% Secure Checkout powered by Razorpay · Pan-India Dispatch'
+                : 'Our Erode team will reach out on WhatsApp (+91 88833 88365) to confirm & dispatch'}
             </p>
           </footer>
         )}
